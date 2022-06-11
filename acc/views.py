@@ -8,6 +8,7 @@ from rest_framework import status
 from .models import Account, ACC_A, ACC_P, ACC_AP
 from .serializers import AccountSerializer
 
+
 def save_acc(acc):
     serializer = AccountSerializer(data=acc)
     if serializer.is_valid():
@@ -17,18 +18,17 @@ def save_acc(acc):
     else:
         raise Exception(serializer.error_messages)
 
-@api_view(['GET'])
+
+@api_view(['POST'])
 @transaction.atomic
 def db_init(request):
     print("Load data")
-    
-    
-    
+
     rout = save_acc({})
     section = {}
     section['parent'] = rout['name']
     sub_section = {}
-    
+
     with open("notes.txt", "r") as fp:
         for line in fp:
             line = line[:-1]
@@ -52,13 +52,19 @@ def db_init(request):
                     case _: acc['acc_type'] = ACC_AP
                 acc['parent'] = sub_section['name']
                 save_acc(acc)
-    
+
+    for i in range(3):
+        acc = {}
+        acc['name'] = f'411{i:02d}'
+        acc['description'] = f'ap. {i:02d}'
+        acc['acc_type'] = ACC_A
+        acc['parent'] = '411'
+        save_acc(acc)
+
     return Response(status=status.HTTP_201_CREATED)
-    
 
 
 # Create your views here.
 class AccView(generics.ListCreateAPIView):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
-
