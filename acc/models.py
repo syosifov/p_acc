@@ -40,7 +40,8 @@ class Assign(models.Model):
     description = models.CharField(max_length=200, null=False, blank=False)
     amount = models.DecimalField(
         max_digits=10, decimal_places=4, null=False, blank=False)
-    date = models.DateTimeField(default=datetime.now, blank=True)
+    # date = models.DateTimeField(default=datetime.now, blank=True)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self) -> str:
         return f"{self.debit} {self.credit} {self.amount:6.2f}"

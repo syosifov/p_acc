@@ -72,19 +72,27 @@ class AccView(generics.ListCreateAPIView):
 
 @api_view(['POST'])
 def assign_view(request):
-    print(request.data)
-    print(request.data['lstAssgn'])
-    print(request.data['lstAssgn'][0])
-    print(request.data['lstAssgn'][0]['debit'])
-    print(request.data['lstAssgn'][0]['credit'])
-    print(request.data['lstAssgn'][0]['value'])
-    print(request.data['amount'])
-    
+    # print(request.data)
+    # print(request.data['description'])
+    # print(request.data['lstAssgn'][0])
+    # print(request.data['lstAssgn'])
+    # print(request.data['lstAssgn'][0]['debit'])
+    # print(request.data['lstAssgn'][0]['credit'])
+    # print(request.data['lstAssgn'][0]['amount'])
+    # print(request.data['total'])
+
+    assign_data = request.data['lstAssgn'][0]
+    assign_data['description'] = request.data['description']
+    print(assign_data)
+
     try:
-        name = request.data['lstAssgn'][0]['debit'];
+        name = request.data['lstAssgn'][0]['debit']
         acc_debit = Account.objects.get(pk=name)
+        serializer = AssignSerializer(data = assign_data)
+        if serializer.is_valid():
+            serializer.save()
         print(acc_debit)
     except Exception as e:
         print(e)
-    
+
     return Response(status=status.HTTP_200_OK)
