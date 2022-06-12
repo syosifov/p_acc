@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .models import Account, ACC_A, ACC_P, ACC_AP
-from .serializers import AccountSerializer
+from .serializers import AccountSerializer, AssignSerializer
 
 
 def save_acc(acc):
@@ -68,3 +68,23 @@ def db_init(request):
 class AccView(generics.ListCreateAPIView):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
+
+
+@api_view(['POST'])
+def assign_view(request):
+    print(request.data)
+    print(request.data['lstAssgn'])
+    print(request.data['lstAssgn'][0])
+    print(request.data['lstAssgn'][0]['debit'])
+    print(request.data['lstAssgn'][0]['credit'])
+    print(request.data['lstAssgn'][0]['value'])
+    print(request.data['amount'])
+    
+    try:
+        name = request.data['lstAssgn'][0]['debit'];
+        acc_debit = Account.objects.get(pk=name)
+        print(acc_debit)
+    except Exception as e:
+        print(e)
+    
+    return Response(status=status.HTTP_200_OK)
