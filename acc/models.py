@@ -1,11 +1,10 @@
 import imp
 from django.db import models
 from datetime import datetime
+from acc.con import *
 
 # Create your models here.
-ACC_A = 0
-ACC_P = 1
-ACC_AP = 2
+
 
 
 class Account(models.Model):
@@ -25,8 +24,11 @@ class Account(models.Model):
                                blank=True,
                                null=True)
 
-    def debit(self, n):
-        pass
+    # def debit(self, n):
+    #     self.assets += n
+    #     match self.acc_type:
+    #         case con.ACC_A | con.ACC_AP: self.balance += n
+    #         case _: self.balance -= n
 
     def __str__(self) -> str:
         return self.name

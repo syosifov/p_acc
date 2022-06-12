@@ -72,26 +72,27 @@ class AccView(generics.ListCreateAPIView):
 
 @api_view(['POST'])
 def assign_view(request):
-    # print(request.data)
-    # print(request.data['description'])
-    # print(request.data['lstAssgn'][0])
-    # print(request.data['lstAssgn'])
-    # print(request.data['lstAssgn'][0]['debit'])
-    # print(request.data['lstAssgn'][0]['credit'])
-    # print(request.data['lstAssgn'][0]['amount'])
-    # print(request.data['total'])
-
+    
     assign_data = request.data['lstAssgn'][0]
     assign_data['description'] = request.data['description']
     print(assign_data)
 
     try:
-        name = request.data['lstAssgn'][0]['debit']
-        acc_debit = Account.objects.get(pk=name)
+        debit = request.data['lstAssgn'][0]['debit']
+        credit = request.data['lstAssgn'][0]['credit']
+        acc_debit = Account.objects.get(pk=debit)
+        acc_debit = Account.objects.get(pk=credit)
         serializer = AssignSerializer(data = assign_data)
         if serializer.is_valid():
             serializer.save()
-        print(acc_debit)
+        amount = request.data['lstAssgn'][0]['amount']
+        newBalance = acc_debit.balance + amount
+        newAssets = acc_debit.assets + amount
+        newData = {'assets': newAssets, 'balance': newBalance}
+        accSerializer = AccountSerializer(acc_debit, data=newData)
+        if accSerializer.is_valid():
+            accSerializer.save()
+
     except Exception as e:
         print(e)
 
