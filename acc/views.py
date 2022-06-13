@@ -100,14 +100,14 @@ def debitAcc(name, amount):
     match acc_debit.acc_type:
         case 0 | 2: 
             newAssets = acc_debit.assets + amount
-            newBalance = acc_debit.balance + amount
+            newBalance = newAssets - acc_debit.liabilities
             newData = {'assets': newAssets, 'balance': newBalance}
             accSerializer = AccountSerializer(acc_debit, data=newData)
             if accSerializer.is_valid():
                 accSerializer.save()
         case _: 
-            newAssets = acc_debit.assets - amount
-            newBalance = acc_debit.balance - amount
+            newAssets = acc_debit.assets + amount
+            newBalance = acc_debit.liabilities - newAssets
             newData = {'assets': newAssets, 'balance': newBalance}
             accSerializer = AccountSerializer(acc_debit, data=newData)
             if accSerializer.is_valid():
@@ -128,7 +128,7 @@ def creditAcc(name, amount):
                 accSerializer.save()
         case _: 
             newLiabilities = acc_credit.liabilities + amount
-            newBalance = acc_credit.assets + newLiabilities
+            newBalance = newLiabilities - acc_credit.assets
             newData = {'liabilities': newLiabilities, 'balance': newBalance}
             accSerializer = AccountSerializer(acc_credit, data=newData)
             if accSerializer.is_valid():
