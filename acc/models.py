@@ -1,7 +1,8 @@
 import imp
 from django.db import models
 from datetime import datetime
-from acc.con import *
+# from acc.con import *
+import acc.con
 
 # Create your models here.
 
@@ -15,7 +16,7 @@ class Account(models.Model):
     assets = models.DecimalField(max_digits=10, decimal_places=4, default=0)
     liabilities = models.DecimalField(
         max_digits=10, decimal_places=4, default=0)
-    acc_type = models.IntegerField(default=ACC_AP)
+    acc_type = models.IntegerField(default=acc.con.ACC_AP)
     balance = models.DecimalField(max_digits=10, decimal_places=4, default=0)
 
     parent = models.ForeignKey('self',

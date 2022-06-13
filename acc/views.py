@@ -5,7 +5,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import Account, ACC_A, ACC_P, ACC_AP
+from .models import Account 
+from .con import ACC_A, ACC_P, ACC_AP
+# import acc.con
 from .serializers import AccountSerializer, AssignSerializer
 
 
@@ -80,20 +82,46 @@ def assign_view(request):
     try:
         debit = request.data['lstAssgn'][0]['debit']
         credit = request.data['lstAssgn'][0]['credit']
-        acc_debit = Account.objects.get(pk=debit)
-        acc_debit = Account.objects.get(pk=credit)
+        amount = request.data['lstAssgn'][0]['amount']
+        debitAcc(debit, amount)
+        # acc_debit  = Account.objects.get(pk=debit)
+        # acc_credit = Account.objects.get(pk=credit)
         serializer = AssignSerializer(data = assign_data)
         if serializer.is_valid():
             serializer.save()
-        amount = request.data['lstAssgn'][0]['amount']
-        newBalance = acc_debit.balance + amount
-        newAssets = acc_debit.assets + amount
-        newData = {'assets': newAssets, 'balance': newBalance}
-        accSerializer = AccountSerializer(acc_debit, data=newData)
-        if accSerializer.is_valid():
-            accSerializer.save()
+        # newBalance = acc_debit.balance + amount
+        # newAssets = acc_debit.assets + amount
+        # newData = {'assets': newAssets, 'balance': newBalance}
+        # accSerializer = AccountSerializer(acc_debit, data=newData)
+        # if accSerializer.is_valid():
+        #     accSerializer.save()
 
     except Exception as e:
         print(e)
 
     return Response(status=status.HTTP_200_OK)
+
+
+def debitAcc(name, amount):
+    acc_debit  = Account.objects.get(pk=name)
+    match acc_debit.acc_type:
+        case 0 | 2: 
+            newAssets = acc_debit.assets + amount
+            newBalance = acc_debit.balance + amount
+            newData = {'assets': newAssets, 'balance': newBalance}
+            accSerializer = AccountSerializer(acc_debit, data=newData)
+            if accSerializer.is_valid():
+                accSerializer.save()
+        case _: 
+            newAssets = acc_debit.assets + amount
+            newBalance = acc_debit.balance - amount
+            newData = {'assets': newAssets, 'balance': newBalance}
+            accSerializer = AccountSerializer(acc_debit, data=newData)
+            if accSerializer.is_valid():
+                accSerializer.save()
+    if acc_debit.parent != None:
+        debitAcc(acc_debit.parent, amount)
+
+
+def creditAcc():
+    pass
