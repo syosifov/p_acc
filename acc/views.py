@@ -84,18 +84,11 @@ def assign_view(request):
         credit = request.data['lstAssgn'][0]['credit']
         amount = request.data['lstAssgn'][0]['amount']
         debitAcc(debit, amount)
-        # acc_debit  = Account.objects.get(pk=debit)
-        # acc_credit = Account.objects.get(pk=credit)
+        creditAcc(credit, amount)
         serializer = AssignSerializer(data = assign_data)
         if serializer.is_valid():
             serializer.save()
-        # newBalance = acc_debit.balance + amount
-        # newAssets = acc_debit.assets + amount
-        # newData = {'assets': newAssets, 'balance': newBalance}
-        # accSerializer = AccountSerializer(acc_debit, data=newData)
-        # if accSerializer.is_valid():
-        #     accSerializer.save()
-
+        
     except Exception as e:
         print(e)
 
@@ -113,7 +106,7 @@ def debitAcc(name, amount):
             if accSerializer.is_valid():
                 accSerializer.save()
         case _: 
-            newAssets = acc_debit.assets + amount
+            newAssets = acc_debit.assets - amount
             newBalance = acc_debit.balance - amount
             newData = {'assets': newAssets, 'balance': newBalance}
             accSerializer = AccountSerializer(acc_debit, data=newData)
@@ -123,5 +116,23 @@ def debitAcc(name, amount):
         debitAcc(acc_debit.parent, amount)
 
 
-def creditAcc():
-    pass
+def creditAcc(name, amount):
+    acc_credit  = Account.objects.get(pk=name)
+    match acc_credit.acc_type:
+        case 0 | 2: 
+            newLiabilities = acc_credit.liabilities + amount
+            newBalance = acc_credit.assets - newLiabilities
+            newData = {'liabilities': newLiabilities, 'balance': newBalance}
+            accSerializer = AccountSerializer(acc_credit, data=newData)
+            if accSerializer.is_valid():
+                accSerializer.save()
+        case _: 
+            newLiabilities = acc_credit.liabilities + amount
+            newBalance = acc_credit.assets + newLiabilities
+            newData = {'liabilities': newLiabilities, 'balance': newBalance}
+            accSerializer = AccountSerializer(acc_credit, data=newData)
+            if accSerializer.is_valid():
+                accSerializer.save()
+    if acc_credit.parent != None:
+        creditAcc(acc_credit.parent, amount)
+
