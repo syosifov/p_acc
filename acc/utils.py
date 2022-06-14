@@ -9,42 +9,42 @@ from .serializers import AccountSerializer, AssignSerializer
 
 def debitAcc(name, amount):
     acc_debit  = Account.objects.get(pk=name)
-    match acc_debit.acc_type:
-        case 0 | 2: 
-            newAssets = acc_debit.assets + amount
-            newBalance = newAssets - acc_debit.liabilities
-            newData = {'assets': newAssets, 'balance': newBalance}
-            accSerializer = AccountSerializer(acc_debit, data=newData)
-            if accSerializer.is_valid():
-                accSerializer.save()
-        case _: 
-            newAssets = acc_debit.assets + amount
-            newBalance = acc_debit.liabilities - newAssets
-            newData = {'assets': newAssets, 'balance': newBalance}
-            accSerializer = AccountSerializer(acc_debit, data=newData)
-            if accSerializer.is_valid():
-                accSerializer.save()
+    if acc_debit.acc_type == ACC_A or acc_debit.acc_type == ACC_AP:
+        newAssets = acc_debit.assets + amount
+        newBalance = newAssets - acc_debit.liabilities
+        newData = {'assets': newAssets, 'balance': newBalance}
+        accSerializer = AccountSerializer(acc_debit, data=newData)
+        if accSerializer.is_valid():
+            accSerializer.save()
+    else: 
+        newAssets = acc_debit.assets + amount
+        newBalance = acc_debit.liabilities - newAssets
+        newData = {'assets': newAssets, 'balance': newBalance}
+        accSerializer = AccountSerializer(acc_debit, data=newData)
+        if accSerializer.is_valid():
+            accSerializer.save()
+
     if acc_debit.parent != None:
         debitAcc(acc_debit.parent, amount)
 
 
 def creditAcc(name, amount):
     acc_credit  = Account.objects.get(pk=name)
-    match acc_credit.acc_type:
-        case 0 | 2: 
-            newLiabilities = acc_credit.liabilities + amount
-            newBalance = acc_credit.assets - newLiabilities
-            newData = {'liabilities': newLiabilities, 'balance': newBalance}
-            accSerializer = AccountSerializer(acc_credit, data=newData)
-            if accSerializer.is_valid():
-                accSerializer.save()
-        case _: 
-            newLiabilities = acc_credit.liabilities + amount
-            newBalance = newLiabilities - acc_credit.assets
-            newData = {'liabilities': newLiabilities, 'balance': newBalance}
-            accSerializer = AccountSerializer(acc_credit, data=newData)
-            if accSerializer.is_valid():
-                accSerializer.save()
+    if acc_credit.acc_type == ACC_A or acc_credit.acc_type == ACC_AP:
+        newLiabilities = acc_credit.liabilities + amount
+        newBalance = acc_credit.assets - newLiabilities
+        newData = {'liabilities': newLiabilities, 'balance': newBalance}
+        accSerializer = AccountSerializer(acc_credit, data=newData)
+        if accSerializer.is_valid():
+            accSerializer.save()
+    else:
+        newLiabilities = acc_credit.liabilities + amount
+        newBalance = newLiabilities - acc_credit.assets
+        newData = {'liabilities': newLiabilities, 'balance': newBalance}
+        accSerializer = AccountSerializer(acc_credit, data=newData)
+        if accSerializer.is_valid():
+            accSerializer.save()
+    
     if acc_credit.parent != None:
         creditAcc(acc_credit.parent, amount)
 
