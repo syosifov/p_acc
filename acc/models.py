@@ -25,12 +25,6 @@ class Account(models.Model):
                                blank=True,
                                null=True)
 
-    # def debit(self, n):
-    #     self.assets += n
-    #     match self.acc_type:
-    #         case con.ACC_A | con.ACC_AP: self.balance += n
-    #         case _: self.balance -= n
-
     def __str__(self) -> str:
         return self.name
 
@@ -48,3 +42,17 @@ class Assign(models.Model):
 
     def __str__(self) -> str:
         return f"{self.debit} {self.credit} {self.amount:6.2f}"
+
+
+class AccountHistory(models.Model):
+    name = models.OneToOneField(Account, on_delete=models.PROTECT)
+    assets = models.DecimalField(max_digits=10, decimal_places=4, default=0)
+    liabilities = models.DecimalField(
+        max_digits=10, decimal_places=4, default=0)
+    balance = models.DecimalField(max_digits=10, decimal_places=4, default=0)
+    debit = models.DecimalField(max_digits=10, decimal_places=4, default=0)
+    credit = models.DecimalField(max_digits=10, decimal_places=4, default=0)
+    end_assets = models.DecimalField(max_digits=10, decimal_places=4, default=0)
+    end_liablities = models.DecimalField(max_digits=10, decimal_places=4, default=0)
+    end_balance = models.DecimalField(max_digits=10, decimal_places=4, default=0)
+    

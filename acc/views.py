@@ -25,6 +25,7 @@ class AccView(generics.ListCreateAPIView):
 
 
 @api_view(['POST'])
+@transaction.atomic
 def assign_view(request):
     
     assign_data = request.data['lstAssgn'][0]
@@ -35,11 +36,12 @@ def assign_view(request):
         debit = request.data['lstAssgn'][0]['debit']
         credit = request.data['lstAssgn'][0]['credit']
         amount = request.data['lstAssgn'][0]['amount']
-        debitAcc(debit, amount)
-        creditAcc(credit, amount)
         serializer = AssignSerializer(data = assign_data)
         if serializer.is_valid():
             serializer.save()
+        idAssign = serializer.data['id']
+        debitAcc(debit, amount, idAssign)
+        creditAcc(credit, amount, idAssign)
         
     except Exception as e:
         print(e)

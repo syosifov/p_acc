@@ -7,7 +7,7 @@ from .serializers import AccountSerializer, AssignSerializer
 
 
 
-def debitAcc(name, amount):
+def debitAcc(name, amount, idAssign):
     acc_debit  = Account.objects.get(pk=name)
     if acc_debit.acc_type == ACC_A or acc_debit.acc_type == ACC_AP:
         newAssets = acc_debit.assets + amount
