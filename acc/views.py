@@ -44,6 +44,6 @@ def assign_view(request):
     except Exception as e:
         print(e)
 
-    return Response(status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_201_CREATED)
 
 
