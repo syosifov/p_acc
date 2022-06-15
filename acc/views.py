@@ -8,7 +8,7 @@ from rest_framework import status
 from .models import Account 
 from .con import ACC_A, ACC_P, ACC_AP
 from .utils import debitAcc, creditAcc, generateLedger
-from .serializers import AccountSerializer, AssignSerializer
+from .serializers import AccountSerializer, AssignSerializer, AssignDetailSerializer
 
 @api_view(['POST'])
 @transaction.atomic
@@ -28,20 +28,26 @@ class AccView(generics.ListCreateAPIView):
 @transaction.atomic
 def assign_view(request):
     
-    assign_data = request.data['lstAssgn'][0]
-    assign_data['description'] = request.data['description']
+    assign_data = request.data
+    lstAssign = request.data['lstAssgn']
+    
     print(assign_data)
+    print(lstAssign)
 
     try:
-        debit = request.data['lstAssgn'][0]['debit']
-        credit = request.data['lstAssgn'][0]['credit']
-        amount = request.data['lstAssgn'][0]['amount']
-        serializer = AssignSerializer(data = assign_data)
-        if serializer.is_valid():
-            serializer.save()
-        idAssign = serializer.data['id']
-        debitAcc(debit, amount, idAssign)
-        creditAcc(credit, amount, idAssign)
+        
+        a_serializer = AssignSerializer(data = assign_data)
+        if a_serializer.is_valid():
+            a_serializer.save()
+        assign_id = a_serializer.data['id']
+        for assign_detail in lstAssign:
+            assign_detail['assign'] = assign_id
+            ad_serializer = AssignDetailSerializer(data=assign_detail)
+            v = ad_serializer.run_validation(data=assign_detail)
+            if ad_serializer.is_valid():
+                ad_serializer.save()
+        # debitAcc(debit, amount, idAssign)
+        # creditAcc(credit, amount, idAssign)
         
     except Exception as e:
         print(e)

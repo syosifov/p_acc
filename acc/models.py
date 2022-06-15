@@ -30,15 +30,24 @@ class Account(models.Model):
 
 
 class Assign(models.Model):
+    description = models.CharField(max_length=200, null=False, blank=False)
+    total = models.DecimalField(
+        max_digits=10, decimal_places=4, null=False, blank=False)
+    # date = models.DateTimeField(default=datetime.now, blank=True)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __str__(self) -> str:
+        return f"{self.description} {self.date} {self.total:6.2f}"
+    
+    
+class AssignDetail(models.Model):
+    assign = models.ForeignKey(Assign, on_delete=models.PROTECT)
     debit = models.ForeignKey(
         Account, blank=True, null=True, on_delete=models.PROTECT, related_name='debit')
     credit = models.ForeignKey(
         Account, blank=True, null=True, on_delete=models.PROTECT, related_name='credit')
-    description = models.CharField(max_length=200, null=False, blank=False)
     amount = models.DecimalField(
         max_digits=10, decimal_places=4, null=False, blank=False)
-    # date = models.DateTimeField(default=datetime.now, blank=True)
-    date = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self) -> str:
         return f"{self.debit} {self.credit} {self.amount:6.2f}"
