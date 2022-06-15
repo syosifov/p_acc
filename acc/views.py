@@ -46,11 +46,17 @@ def assign_view(request):
             v = ad_serializer.run_validation(data=assign_detail)
             if ad_serializer.is_valid():
                 ad_serializer.save()
-        # debitAcc(debit, amount, idAssign)
-        # creditAcc(credit, amount, idAssign)
+                id_assign_detail = ad_serializer.data['id']
+                debit = assign_detail['debit']
+                credit = assign_detail['credit']
+                amount = assign_detail['amount']
+                pass
+                # debitAcc(debit, amount, id_assign_detail)
+                # creditAcc(credit, amount, id_assign_detail)
         
     except Exception as e:
         print(e)
+        return Response(e, status=status.HTTP_400_BAD_REQUEST)
 
     return Response(status=status.HTTP_201_CREATED)
 
