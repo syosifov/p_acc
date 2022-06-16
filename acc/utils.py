@@ -3,16 +3,32 @@ from rest_framework import status
 
 from .models import Account 
 from .con import ACC_A, ACC_P, ACC_AP
-from .serializers import AccountSerializer, AssignSerializer
+from .serializers import AccountSerializer, AssignSerializer, AccountHistorySerializer
 
 
 
-def debitAcc(name, amount, idAssign):
+def debitAcc(name, amount, id_assign_detail):
+    
     acc_debit  = Account.objects.get(pk=name)
-    if acc_debit.acc_type == ACC_A or acc_debit.acc_type == ACC_AP:
+    acc_history = {}
+    acc_history['name'] = name;
+    acc_history['assignDetail'] = id_assign_detail
+    acc_history['assets'] = acc_debit.assets
+    acc_history['liabilities'] = acc_debit.liabilities
+    acc_history['end_liablities'] = acc_debit.liabilities
+    acc_history['balance'] = acc_debit.balance
+    acc_history['debit'] = amount
+    
+    if acc_debit.acc_type == ACC_A or \
+       acc_debit.acc_type == ACC_AP:
+        
         newAssets = acc_debit.assets + amount
         newBalance = newAssets - acc_debit.liabilities
         newData = {'assets': newAssets, 'balance': newBalance}
+        
+        acc_history['end_assets'] = newAssets
+        acc_history['end_balance'] = newBalance
+        
         accSerializer = AccountSerializer(acc_debit, data=newData)
         if accSerializer.is_valid():
             accSerializer.save()
@@ -20,12 +36,21 @@ def debitAcc(name, amount, idAssign):
         newAssets = acc_debit.assets + amount
         newBalance = acc_debit.liabilities - newAssets
         newData = {'assets': newAssets, 'balance': newBalance}
+        
+        acc_history['end_assets'] = newAssets
+        acc_history['end_balance'] = newBalance
+        
         accSerializer = AccountSerializer(acc_debit, data=newData)
         if accSerializer.is_valid():
             accSerializer.save()
 
+    accountHistorySerializer = AccountHistorySerializer(data=acc_history)
+    accountHistorySerializer.run_validation(data=acc_history)
+    if accountHistorySerializer.is_valid():
+        accountHistorySerializer.save()
+
     if acc_debit.parent != None:
-        debitAcc(acc_debit.parent, amount)
+        debitAcc(acc_debit.parent, amount, id_assign_detail)
 
 
 def creditAcc(name, amount):

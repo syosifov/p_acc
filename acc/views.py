@@ -50,9 +50,8 @@ def assign_view(request):
                 debit = assign_detail['debit']
                 credit = assign_detail['credit']
                 amount = assign_detail['amount']
-                pass
-                # debitAcc(debit, amount, id_assign_detail)
-                # creditAcc(credit, amount, id_assign_detail)
+                debitAcc(debit, amount, id_assign_detail)
+                creditAcc(credit, amount)
         
     except Exception as e:
         print(e)

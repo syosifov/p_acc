@@ -7,7 +7,6 @@ import acc.con
 # Create your models here.
 
 
-
 class Account(models.Model):
     name = models.CharField(max_length=20, null=False,
                             blank=False, unique=True, primary_key=True, default='0')
@@ -38,8 +37,8 @@ class Assign(models.Model):
 
     def __str__(self) -> str:
         return f"{self.description} {self.date} {self.total:6.2f}"
-    
-    
+
+
 class AssignDetail(models.Model):
     assign = models.ForeignKey(Assign, on_delete=models.PROTECT)
     debit = models.ForeignKey(
@@ -54,14 +53,20 @@ class AssignDetail(models.Model):
 
 
 class AccountHistory(models.Model):
-    name = models.OneToOneField(Account, on_delete=models.PROTECT)
+    name = models.ForeignKey(Account, on_delete=models.PROTECT)
+    assignDetail = models.ForeignKey(AssignDetail, 
+                                        on_delete=models.PROTECT,
+                                        blank=True,
+                                        null=True)
     assets = models.DecimalField(max_digits=10, decimal_places=4, default=0)
     liabilities = models.DecimalField(
         max_digits=10, decimal_places=4, default=0)
     balance = models.DecimalField(max_digits=10, decimal_places=4, default=0)
     debit = models.DecimalField(max_digits=10, decimal_places=4, default=0)
     credit = models.DecimalField(max_digits=10, decimal_places=4, default=0)
-    end_assets = models.DecimalField(max_digits=10, decimal_places=4, default=0)
-    end_liablities = models.DecimalField(max_digits=10, decimal_places=4, default=0)
-    end_balance = models.DecimalField(max_digits=10, decimal_places=4, default=0)
-    
+    end_assets = models.DecimalField(
+        max_digits=10, decimal_places=4, default=0)
+    end_liablities = models.DecimalField(
+        max_digits=10, decimal_places=4, default=0)
+    end_balance = models.DecimalField(
+        max_digits=10, decimal_places=4, default=0)
