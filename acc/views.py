@@ -47,11 +47,11 @@ def assign_view(request):
             if ad_serializer.is_valid():
                 ad_serializer.save()
                 id_assign_detail = ad_serializer.data['id']
-                debit = assign_detail['debit']
-                credit = assign_detail['credit']
+                debit_acc = assign_detail['debit_acc']
+                credit_acc = assign_detail['credit_acc']
                 amount = assign_detail['amount']
-                debitAcc(debit, amount, id_assign_detail)
-                creditAcc(credit, amount)
+                debitAcc(debit_acc, amount, id_assign_detail)
+                creditAcc(credit_acc, amount)
         
     except Exception as e:
         print(e)

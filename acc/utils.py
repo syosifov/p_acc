@@ -1,45 +1,61 @@
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import Account 
+from .models import Account
 from .con import ACC_A, ACC_P, ACC_AP
 from .serializers import AccountSerializer, AssignSerializer, AccountHistorySerializer
 
 
+def prepareAccHistory(account: Account,
+                      id_assign_detail: int,
+                      amaount_debit: float = 0,
+                      amount_credit: float = 0,
+                      newBalance: float = 0,
+                    #   newAssets: float = 0,
+                    #   newLiablities: float = 0
+                    ):
+    acc_history = {}
+    acc_history['name'] = account.name
+    acc_history['assignDetail'] = id_assign_detail
+    acc_history['assets'] = account.assets
+    acc_history['end_assets'] = account.assets
+    acc_history['liabilities'] = account.liabilities
+    acc_history['end_liablities'] = account.liabilities
+    acc_history['amaount_debit'] = amaount_debit
+    acc_history['amount_credit'] = amount_credit
+    acc_history['balance'] = account.balance
+    
+    return acc_history
+
 
 def debitAcc(name, amount, id_assign_detail):
-    
-    acc_debit  = Account.objects.get(pk=name)
-    acc_history = {}
-    acc_history['name'] = name;
-    acc_history['assignDetail'] = id_assign_detail
-    acc_history['assets'] = acc_debit.assets
-    acc_history['liabilities'] = acc_debit.liabilities
-    acc_history['end_liablities'] = acc_debit.liabilities
-    acc_history['balance'] = acc_debit.balance
-    acc_history['debit'] = amount
+
+    acc_debit = Account.objects.get(pk=name)
+    acc_history = prepareAccHistory(acc_debit,
+                                    id_assign_detail,
+                                    amaount_debit=amount)
     
     if acc_debit.acc_type == ACC_A or \
        acc_debit.acc_type == ACC_AP:
-        
+
         newAssets = acc_debit.assets + amount
         newBalance = newAssets - acc_debit.liabilities
         newData = {'assets': newAssets, 'balance': newBalance}
         
         acc_history['end_assets'] = newAssets
         acc_history['end_balance'] = newBalance
-        
+
         accSerializer = AccountSerializer(acc_debit, data=newData)
         if accSerializer.is_valid():
             accSerializer.save()
-    else: 
+    else:
         newAssets = acc_debit.assets + amount
         newBalance = acc_debit.liabilities - newAssets
         newData = {'assets': newAssets, 'balance': newBalance}
         
         acc_history['end_assets'] = newAssets
         acc_history['end_balance'] = newBalance
-        
+
         accSerializer = AccountSerializer(acc_debit, data=newData)
         if accSerializer.is_valid():
             accSerializer.save()
@@ -54,7 +70,7 @@ def debitAcc(name, amount, id_assign_detail):
 
 
 def creditAcc(name, amount):
-    acc_credit  = Account.objects.get(pk=name)
+    acc_credit = Account.objects.get(pk=name)
     if acc_credit.acc_type == ACC_A or acc_credit.acc_type == ACC_AP:
         newLiabilities = acc_credit.liabilities + amount
         newBalance = acc_credit.assets - newLiabilities
@@ -69,7 +85,7 @@ def creditAcc(name, amount):
         accSerializer = AccountSerializer(acc_credit, data=newData)
         if accSerializer.is_valid():
             accSerializer.save()
-    
+
     if acc_credit.parent != None:
         creditAcc(acc_credit.parent, amount)
 
@@ -114,7 +130,7 @@ def generateLedger():
                 acc['parent'] = sub_section['name']
                 save_acc(acc)
 
-    for i in range(1,4):
+    for i in range(1, 4):
         acc = {}
         acc['name'] = f'411{i:02d}'
         acc['description'] = f'ap. {i:02d}'
@@ -123,4 +139,3 @@ def generateLedger():
         save_acc(acc)
 
     return Response(status=status.HTTP_201_CREATED)
-

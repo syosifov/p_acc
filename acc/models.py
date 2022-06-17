@@ -41,9 +41,9 @@ class Assign(models.Model):
 
 class AssignDetail(models.Model):
     assign = models.ForeignKey(Assign, on_delete=models.PROTECT)
-    debit = models.ForeignKey(
+    debit_acc = models.ForeignKey(
         Account, blank=True, null=True, on_delete=models.PROTECT, related_name='debit')
-    credit = models.ForeignKey(
+    credit_acc = models.ForeignKey(
         Account, blank=True, null=True, on_delete=models.PROTECT, related_name='credit')
     amount = models.DecimalField(
         max_digits=10, decimal_places=4, null=False, blank=False)
@@ -62,8 +62,8 @@ class AccountHistory(models.Model):
     liabilities = models.DecimalField(
         max_digits=10, decimal_places=4, default=0)
     balance = models.DecimalField(max_digits=10, decimal_places=4, default=0)
-    debit = models.DecimalField(max_digits=10, decimal_places=4, default=0)
-    credit = models.DecimalField(max_digits=10, decimal_places=4, default=0)
+    amaount_debit = models.DecimalField(max_digits=10, decimal_places=4, default=0)
+    amount_credit = models.DecimalField(max_digits=10, decimal_places=4, default=0)
     end_assets = models.DecimalField(
         max_digits=10, decimal_places=4, default=0)
     end_liablities = models.DecimalField(
