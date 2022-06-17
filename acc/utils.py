@@ -10,9 +10,6 @@ def prepareAccHistory(account: Account,
                       id_assign_detail: int,
                       amaount_debit: float = 0,
                       amount_credit: float = 0,
-                      newBalance: float = 0,
-                    #   newAssets: float = 0,
-                    #   newLiablities: float = 0
                     ):
     acc_history = {}
     acc_history['name'] = account.name
@@ -69,13 +66,20 @@ def debitAcc(name, amount, id_assign_detail):
         debitAcc(acc_debit.parent, amount, id_assign_detail)
 
 
-def creditAcc(name, amount):
+def creditAcc(name, amount, id_assign_detail):
     acc_credit = Account.objects.get(pk=name)
+    acc_history = prepareAccHistory(acc_credit,
+                                    id_assign_detail,
+                                    amount_credit=amount)
     if acc_credit.acc_type == ACC_A or acc_credit.acc_type == ACC_AP:
         newLiabilities = acc_credit.liabilities + amount
         newBalance = acc_credit.assets - newLiabilities
         newData = {'liabilities': newLiabilities, 'balance': newBalance}
         accSerializer = AccountSerializer(acc_credit, data=newData)
+        
+        acc_history['end_liabilities'] = newLiabilities
+        acc_history['end_balance'] = newBalance
+        
         if accSerializer.is_valid():
             accSerializer.save()
     else:
@@ -83,11 +87,20 @@ def creditAcc(name, amount):
         newBalance = newLiabilities - acc_credit.assets
         newData = {'liabilities': newLiabilities, 'balance': newBalance}
         accSerializer = AccountSerializer(acc_credit, data=newData)
+        
+        acc_history['end_liabilities'] = newLiabilities
+        acc_history['end_balance'] = newBalance
+        
         if accSerializer.is_valid():
             accSerializer.save()
+            
+    accountHistorySerializer = AccountHistorySerializer(data=acc_history)
+    accountHistorySerializer.run_validation(data=acc_history)
+    if accountHistorySerializer.is_valid():
+        accountHistorySerializer.save()
 
     if acc_credit.parent != None:
-        creditAcc(acc_credit.parent, amount)
+        creditAcc(acc_credit.parent, amount, id_assign_detail)
 
 
 def save_acc(acc):

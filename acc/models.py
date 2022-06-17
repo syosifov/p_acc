@@ -66,7 +66,7 @@ class AccountHistory(models.Model):
     amount_credit = models.DecimalField(max_digits=10, decimal_places=4, default=0)
     end_assets = models.DecimalField(
         max_digits=10, decimal_places=4, default=0)
-    end_liablities = models.DecimalField(
+    end_liabilities = models.DecimalField(
         max_digits=10, decimal_places=4, default=0)
     end_balance = models.DecimalField(
         max_digits=10, decimal_places=4, default=0)
