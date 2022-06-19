@@ -34,6 +34,8 @@ class Assign(models.Model):
         max_digits=10, decimal_places=4, null=False, blank=False)
     # date = models.DateTimeField(default=datetime.now, blank=True)
     date = models.DateTimeField(auto_now_add=True, blank=True)
+    reversed = models.BooleanField(default=False)
+    reverse = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self) -> str:
         return f"{self.description} {self.date} {self.total:6.2f}"
@@ -42,14 +44,14 @@ class Assign(models.Model):
 class AssignDetail(models.Model):
     assign = models.ForeignKey(Assign, on_delete=models.PROTECT)
     debit_acc = models.ForeignKey(
-        Account, blank=True, null=True, on_delete=models.PROTECT, related_name='debit')
+        Account, blank=True, null=True, on_delete=models.PROTECT, related_name='debit_acc')
     credit_acc = models.ForeignKey(
-        Account, blank=True, null=True, on_delete=models.PROTECT, related_name='credit')
+        Account, blank=True, null=True, on_delete=models.PROTECT, related_name='credit_acc')
     amount = models.DecimalField(
         max_digits=10, decimal_places=4, null=False, blank=False)
 
     def __str__(self) -> str:
-        return f"{self.debit} {self.credit} {self.amount:6.2f}"
+        return f"{self.debit_acc} {self.credit_acc} {self.amount:6.2f}"
 
 
 class AccountHistory(models.Model):
