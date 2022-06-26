@@ -122,7 +122,7 @@ def generateLedger():
     section['parent'] = rout['name']
     sub_section = {}
 
-    with open("notes.txt", "r") as fp:
+    with open("short_ledger.txt", "r") as fp:
         for line in fp:
             line = line[:-1]
             sa = line.split(' | ')

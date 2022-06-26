@@ -1,0 +1,15 @@
+1 | CAPITAL ACCOUNTS AND LOANS
+10 | Capital
+104 | Capital of non - profit enterprises | Passive | Analytical
+12 | Financial Results
+125 | Result of the activity of non-profit enterprises | Act-Pass | Synthetic
+4 | ACCOUNTS FOR SETTLEMENTS
+41 | Customers and Related Accounts
+411 | Receivables from customers | Active | Analytical
+5 | ACCOUNTS FOR FINANCIAL RESOURCES
+50 | Cash
+501 | Cash register in BGN | Active | Analytical
+503 | Current accounts in BGN | Active | Analytical
+7 | INCOME ACCOUNTS
+71 | Revenues in Non - Profit Enterprises
+712 | Revenue from membership fees | Passive | Synthetic
