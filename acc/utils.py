@@ -162,30 +162,21 @@ def assignData(assign_data):
     
     print(assign_data)
     print(lstAssign)
-
-    try:
-        
-        a_serializer = AssignSerializer(data = assign_data)
-        if a_serializer.is_valid():
-            a_serializer.save()
-        assign_id = a_serializer.data['id']
-        for assign_detail in lstAssign:
-            assign_detail['assign'] = assign_id
-            ad_serializer = AssignDetailSerializer(data=assign_detail)
-            v = ad_serializer.run_validation(data=assign_detail)
-            if ad_serializer.is_valid():
-                ad_serializer.save()
-                id_assign_detail = ad_serializer.data['id']
-                debit_acc = assign_detail['debit_acc']
-                credit_acc = assign_detail['credit_acc']
-                amount = assign_detail['amount']
-                debitAcc(debit_acc, amount, id_assign_detail)
-                creditAcc(credit_acc, amount, id_assign_detail)
-        
-    except Exception as e:
-        print(e)
-        return Response(e, status=status.HTTP_400_BAD_REQUEST)
-
-    return Response(status=status.HTTP_201_CREATED)
-
-
+    
+    a_serializer = AssignSerializer(data = assign_data)
+    if a_serializer.is_valid():
+        a_serializer.save()
+    assign_id = a_serializer.data['id']
+    for assign_detail in lstAssign:
+        assign_detail['assign'] = assign_id
+        ad_serializer = AssignDetailSerializer(data=assign_detail)
+        v = ad_serializer.run_validation(data=assign_detail)
+        if ad_serializer.is_valid():
+            ad_serializer.save()
+            id_assign_detail = ad_serializer.data['id']
+            debit_acc = assign_detail['debit_acc']
+            credit_acc = assign_detail['credit_acc']
+            amount = assign_detail['amount']
+            debitAcc(debit_acc, amount, id_assign_detail)
+            creditAcc(credit_acc, amount, id_assign_detail)
+    # raise Exception("Test exception")
