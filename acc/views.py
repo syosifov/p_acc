@@ -32,7 +32,7 @@ def assign_view(request):
             assign_data = request.data
             assignData(assign_data)
     except Exception as e:
-        return Response(e, status=status.HTTP_400_BAD_REQUEST)
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
     return Response(status=status.HTTP_201_CREATED)
 

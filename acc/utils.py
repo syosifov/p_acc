@@ -159,6 +159,8 @@ def generateLedger():
 
 def assignData(assign_data):
     lstAssign = assign_data['lstAssgn']
+    total = assign_data['total']
+    sum = 0
     
     print(assign_data)
     print(lstAssign)
@@ -177,6 +179,9 @@ def assignData(assign_data):
             debit_acc = assign_detail['debit_acc']
             credit_acc = assign_detail['credit_acc']
             amount = assign_detail['amount']
+            sum += amount
             debitAcc(debit_acc, amount, id_assign_detail)
             creditAcc(credit_acc, amount, id_assign_detail)
-    # raise Exception("Test exception")
+    if abs(total - sum) >= 0.0001:
+        raise Exception("Accounting data mismatch")
+    # raise Exception('Test exception')
