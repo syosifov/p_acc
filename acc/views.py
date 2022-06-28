@@ -1,10 +1,10 @@
 from audioop import reverse
 from django.db import transaction
 
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Account, Assign, AssignDetail 
 from .con import ACC_A, ACC_P, ACC_AP
