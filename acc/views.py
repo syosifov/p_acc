@@ -1,15 +1,15 @@
-from audioop import reverse
+
 from django.db import transaction
 
 from rest_framework import generics, status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .models import Account, Assign, AssignDetail 
 from .con import ACC_A, ACC_P, ACC_AP
 from .utils import assignData, generateLedger, assignData, debitAcc, creditAcc
-from .serializers import AccountSerializer 
+from .serializers import AccountSerializer, UserSerializer
 
 @api_view(['POST'])     #init/
 @transaction.atomic
@@ -62,8 +62,26 @@ def reversalView(request):
             
         
     except Exception as e:
-        print(e)
-        return Response(e, status=status.HTTP_400_BAD_REQUEST)
-
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
     
     return Response(status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])         # signup/
+@permission_classes([AllowAny])
+def signUp(request):
+    try:
+        user = User()
+        user.password = request.data['password']
+        user.username = request.data['username']
+        user.save()
+        user.set_password(user.password)
+        user.save()
+        token = Token.objects.get(user_id=user.id)
+        user_serializer = UserSerializer(user)
+        data = user_serializer.data
+        data['token'] = token.key
+    except Exception as e:
+        return Response(str(e),status=status.HTTP_400_BAD_REQUEST) 
+    return Response(data, status=status.HTTP_201_CREATED)
+
