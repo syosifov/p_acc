@@ -1,7 +1,11 @@
-import imp
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+from django.conf import settings
+
 from django.db import models
 from datetime import datetime
-# from acc.con import *
+
 import acc.con
 
 # Create your models here.
@@ -72,3 +76,10 @@ class AccountHistory(models.Model):
         max_digits=10, decimal_places=4, default=0)
     end_balance = models.DecimalField(
         max_digits=10, decimal_places=4, default=0)
+
+
+@receiver(post_save,sender=settings.AUTH_USER_MODEL)
+def createtAuthToken(sender,instance,created,**kwargs):
+    
+    if created:
+        Token.objects.create(user=instance)
