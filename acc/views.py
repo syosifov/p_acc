@@ -1,6 +1,9 @@
 
 from django.db import transaction
 
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
+
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -72,10 +75,8 @@ def reversalView(request):
 def signUp(request):
     try:
         user = User()
-        user.password = request.data['password']
+        user.set_password(request.data['password'])
         user.username = request.data['username']
-        user.save()
-        user.set_password(user.password)
         user.save()
         token = Token.objects.get(user_id=user.id)
         user_serializer = UserSerializer(user)
