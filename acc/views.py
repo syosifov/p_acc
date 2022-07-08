@@ -74,15 +74,25 @@ def reversalView(request):
 @permission_classes([AllowAny])
 def signUp(request):
     try:
-        user = User()
-        user.set_password(request.data['password'])
-        user.username = request.data['username']
-        user.save()
-        token = Token.objects.get(user_id=user.id)
-        user_serializer = UserSerializer(user)
-        data = user_serializer.data
-        data['token'] = token.key
+        with transaction.atomic():
+            user = User()
+            user.set_password(request.data['password'])
+            user.username = request.data['username']
+            user.save()
+            # token = Token.objects.get(user_id=user.id)
+            user_serializer = UserSerializer(user)
+            data = user_serializer.data
+            # data['token'] = token.key
     except Exception as e:
         return Response(str(e),status=status.HTTP_400_BAD_REQUEST) 
     return Response(data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET'])
+def logout(request):
+    pass
+    user = request.user
+    token = Token.objects.get(user=user)
+    token.delete()
+    return Response(status=status.HTTP_200_OK)
 
