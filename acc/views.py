@@ -90,7 +90,7 @@ def signUp(request):
 
 @api_view(['GET'])
 def logout(request):
-    pass
+
     user = request.user
     token = Token.objects.get(user=user)
     token.delete()

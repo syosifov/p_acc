@@ -4,6 +4,7 @@ from django.urls import path
 
 from .views import (AccView, db_init, assign_view,
                     reversalView, signUp, logout)
+from .login import CustomAuthToken
 
 
 urlpatterns = [
@@ -13,4 +14,5 @@ urlpatterns = [
     path('reverse/', reversalView),
     path('signup/', signUp),
     path('logout/', logout),
+    path('login/', CustomAuthToken.as_view()),
 ]
