@@ -1,8 +1,6 @@
 
 from django.db import transaction
-
-from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
@@ -12,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Account, Assign, AssignDetail 
 from .con import ACC_A, ACC_P, ACC_AP
 from .utils import assignData, generateLedger, debitAcc, creditAcc
-from .serializers import AccountSerializer, UserSerializer
+from .serializers import AccountSerializer
 
 @api_view(['POST'])     #init/
 @transaction.atomic
@@ -69,30 +67,4 @@ def reversalView(request):
     
     return Response(status=status.HTTP_201_CREATED)
 
-
-@api_view(['POST'])         # signup/
-@permission_classes([AllowAny])
-def signUp(request):
-    try:
-        with transaction.atomic():
-            user = User()
-            user.set_password(request.data['password'])
-            user.username = request.data['username']
-            user.save()
-            # token = Token.objects.get(user_id=user.id)
-            user_serializer = UserSerializer(user)
-            data = user_serializer.data
-            # data['token'] = token.key
-    except Exception as e:
-        return Response(str(e),status=status.HTTP_400_BAD_REQUEST) 
-    return Response(data, status=status.HTTP_201_CREATED)
-
-
-@api_view(['GET'])
-def logout(request):
-
-    user = request.user
-    token = Token.objects.get(user=user)
-    token.delete()
-    return Response(status=status.HTTP_200_OK)
 

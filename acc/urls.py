@@ -3,8 +3,8 @@ from xml.etree.ElementInclude import include
 from django.urls import path
 
 from .views import (AccView, db_init, assign_view,
-                    reversalView, signUp, logout)
-from .login import CustomAuthToken
+                    reversalView)
+from .login import CustomAuthToken, signUp, logout
 
 
 urlpatterns = [
