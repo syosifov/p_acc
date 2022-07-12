@@ -30,7 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
 # https://www.django-rest-framework.org/api-guide/authentication/
-class CustomAuthToken(ObtainAuthToken):
+class CustomAuthToken(ObtainAuthToken):     # login/
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
@@ -65,7 +65,7 @@ def signUp(request):
     return Response(data, status=status.HTTP_201_CREATED)
 
 
-@api_view(['GET'])
+@api_view(['GET'])          # logout/
 def logout(request):
 
     user = request.user
