@@ -74,8 +74,10 @@ def reversalView(request):
 
 @api_view(['POST'])     # create_group/
 def create_group(request):
-    parent = '411'
-    suffix = 'g'
+    # parent = '411'
+    # suffix = 'g'
+    parent = '411g001'
+    suffix = 'g001a'
     start = 1
     end = 3
     aParent = Account.objects.get(pk=parent)
