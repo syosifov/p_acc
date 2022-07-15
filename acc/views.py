@@ -1,4 +1,5 @@
 
+from ssl import ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE
 from unicodedata import name
 from django.db import transaction
 from django.db.models.signals import post_save
@@ -73,12 +74,18 @@ def reversalView(request):
 
 @api_view(['POST'])     # create_group/
 def create_group(request):
-    a411 = Account.objects.get(pk=acc.c.A411)
-    a411001 = Account(name=a411.name+'001',
-                      acc_type=a411.acc_type,
-                      parent=a411,
-                      description='001')
-    a411001.save()
+    parent = '411'
+    suffix = 'g'
+    start = 1
+    end = 3
+    aParent = Account.objects.get(pk=parent)
+    for i in range(int(start), int(end)+1):
+        s = suffix+f'{i:03d}'
+        a = Account(name=aParent.name+s,
+                    acc_type=aParent.acc_type,
+                    parent=aParent,
+                    description=s)
+        a.save()
     return Response(status=status.HTTP_201_CREATED)
 
 
