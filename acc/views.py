@@ -38,7 +38,7 @@ def assign_view(request):
     return Response(status=status.HTTP_201_CREATED)
 
     
-@api_view(['POST'])
+@api_view(['POST'])     # reverse/
 def reversalView(request):
     try:
         idToReverse = request.data['ledgerRecId']
@@ -65,6 +65,13 @@ def reversalView(request):
     except Exception as e:
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
     
+    return Response(status=status.HTTP_201_CREATED)
+
+
+
+@api_view(['POST'])     # create_group/
+def create_group(request):
+    pass
     return Response(status=status.HTTP_201_CREATED)
 
 
