@@ -1,4 +1,5 @@
 
+from unicodedata import name
 from django.db import transaction
 from django.db.models.signals import post_save
 
@@ -11,6 +12,7 @@ from .models import Account, Assign, AssignDetail
 from .con import ACC_A, ACC_P, ACC_AP
 from .utils import assignData, generateLedger, debitAcc, creditAcc
 from .serializers import AccountSerializer
+import acc.c
 
 @api_view(['POST'])     #init/
 @transaction.atomic
@@ -71,7 +73,12 @@ def reversalView(request):
 
 @api_view(['POST'])     # create_group/
 def create_group(request):
-    pass
+    a411 = Account.objects.get(pk=acc.c.A411)
+    a411001 = Account(name=a411.name+'001',
+                      acc_type=a411.acc_type,
+                      parent=a411,
+                      description='001')
+    a411001.save()
     return Response(status=status.HTTP_201_CREATED)
 
 

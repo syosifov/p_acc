@@ -146,13 +146,13 @@ def generateLedger():
                 acc['parent'] = sub_section['name']
                 save_acc(acc)
 
-    for i in range(1, 4):
-        acc = {}
-        acc['name'] = f'411{i:02d}'
-        acc['description'] = f'ap. {i:02d}'
-        acc['acc_type'] = ACC_A
-        acc['parent'] = '411'
-        save_acc(acc)
+    # for i in range(1, 4):
+    #     acc = {}
+    #     acc['name'] = f'411{i:02d}'
+    #     acc['description'] = f'ap. {i:02d}'
+    #     acc['acc_type'] = ACC_A
+    #     acc['parent'] = '411'
+    #     save_acc(acc)
 
     return Response(status=status.HTTP_201_CREATED)
 
