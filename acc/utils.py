@@ -181,9 +181,9 @@ def assignData(assign_data):
     
 
 def createGroup(parent:str ,
-                 suffix:str ,
-                 start:str ,
-                 end: str):
+                suffix:str ,
+                start:str ,
+                end: str):
     aParent = Account.objects.get(pk=parent)
     for i in range(int(start), int(end)+1):
         s = aParent.name+suffix+str(i).zfill(c.LZ)
