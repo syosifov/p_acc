@@ -76,14 +76,18 @@ def reversalView(request):
 def create_group(request):
     # parent = '411'
     # suffix = 'g'
-    parent = '411g001'
-    suffix = 'a'
-    start = 1
-    end = 3
+    # parent = '411g001'
+    # suffix = 'a'
+    # start = 1
+    # end = 3
     
     try:
         with transaction.atomic():
-            assign_data = request.data
+            ad = request.data
+            parent = ad['parent']
+            suffix = ad['suffix']
+            start = ad['start']
+            end = ad['end']
             createGroup(parent, suffix, start, end)
     except Exception as e:
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
