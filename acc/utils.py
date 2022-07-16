@@ -7,6 +7,7 @@ from .serializers import (AccountSerializer,
                           AssignSerializer, 
                           AccountHistorySerializer, 
                           AssignDetailSerializer)
+import acc.c as c
 
 
 def prepareAccHistory(account: Account,
@@ -146,14 +147,6 @@ def generateLedger():
                 acc['parent'] = sub_section['name']
                 save_acc(acc)
 
-    # for i in range(1, 4):
-    #     acc = {}
-    #     acc['name'] = f'411{i:02d}'
-    #     acc['description'] = f'ap. {i:02d}'
-    #     acc['acc_type'] = ACC_A
-    #     acc['parent'] = '411'
-    #     save_acc(acc)
-
     return Response(status=status.HTTP_201_CREATED)
 
 
@@ -185,3 +178,18 @@ def assignData(assign_data):
     if abs(total - sum) >= 0.0001:
         raise Exception("Accounting data mismatch")
     # raise Exception('Test exception')
+    
+
+def createGroup(parent:str ,
+                 suffix:str ,
+                 start:str ,
+                 end: str):
+    aParent = Account.objects.get(pk=parent)
+    for i in range(int(start), int(end)+1):
+        s = aParent.name+suffix+str(i).zfill(c.LZ)
+        a = Account(name=s,
+                    acc_type=aParent.acc_type,
+                    parent=aParent,
+                    description=s)
+        a.save()
+

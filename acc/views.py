@@ -11,9 +11,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .models import Account, Assign, AssignDetail 
 from .con import ACC_A, ACC_P, ACC_AP
-from .utils import assignData, generateLedger, debitAcc, creditAcc
+from .utils import (assignData, generateLedger, debitAcc, creditAcc, createGroup)
 from .serializers import AccountSerializer
-import acc.c as c
+
 
 @api_view(['POST'])     #init/
 @transaction.atomic
@@ -80,14 +80,14 @@ def create_group(request):
     suffix = 'a'
     start = 1
     end = 3
-    aParent = Account.objects.get(pk=parent)
-    for i in range(int(start), int(end)+1):
-        s = aParent.name+suffix+str(i).zfill(c.LZ)
-        a = Account(name=s,
-                    acc_type=aParent.acc_type,
-                    parent=aParent,
-                    description=s)
-        a.save()
+    
+    try:
+        with transaction.atomic():
+            assign_data = request.data
+            createGroup(parent, suffix, start, end)
+    except Exception as e:
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+
     return Response(status=status.HTTP_201_CREATED)
 
 
