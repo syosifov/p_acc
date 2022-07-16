@@ -13,7 +13,7 @@ from .models import Account, Assign, AssignDetail
 from .con import ACC_A, ACC_P, ACC_AP
 from .utils import assignData, generateLedger, debitAcc, creditAcc
 from .serializers import AccountSerializer
-import acc.c
+import acc.c as c
 
 @api_view(['POST'])     #init/
 @transaction.atomic
@@ -77,13 +77,13 @@ def create_group(request):
     # parent = '411'
     # suffix = 'g'
     parent = '411g001'
-    suffix = 'g001a'
+    suffix = 'a'
     start = 1
     end = 3
     aParent = Account.objects.get(pk=parent)
     for i in range(int(start), int(end)+1):
-        s = suffix+f'{i:03d}'
-        a = Account(name=aParent.name+s,
+        s = aParent.name+suffix+str(i).zfill(c.LZ)
+        a = Account(name=s,
                     acc_type=aParent.acc_type,
                     parent=aParent,
                     description=s)
