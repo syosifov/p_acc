@@ -10,19 +10,21 @@ from .utils import createSubscriber
 
 @api_view(['POST'])     # subs/create_subscriber/
 def create_subscriber(request):
-    # suffix = 'g'
-    # parent = '411g001'
-    # suffix = 'a'
-    # start = 1
-    # end = 3
+    # {
+    #     "parent": "g001",
+    #     "suffix": "a",
+    #     "start": 1,
+    #     "end": 4
+    # }
     
     try:
         with transaction.atomic():
             ad = request.data
+            parent = ad['parent']
             suffix = ad['suffix']
             start = ad['start']
             end = ad['end']
-            createSubscriber(suffix, start, end)
+            createSubscriber(parent, suffix, start, end)
     except Exception as e:
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 

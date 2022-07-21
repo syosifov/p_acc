@@ -1,16 +1,17 @@
-from unicodedata import name
 from acc.con import A411, LZ
 from acc.utils import getOrCreateAcc
 
 from .models import Subscriber
 
 
-def createSubscriber(suffix:str,
-                     start:str,
+def createSubscriber(parent: str,
+                     suffix: str,
+                     start: str,
                      end: str):
+    parentAcc = getOrCreateAcc(A411,parent)
     for i in range(int(start), int(end)+1):
         s = suffix+str(i).zfill(LZ)
-        a = getOrCreateAcc(A411,s)
-        subscriber = Subscriber(name=s,
+        a = getOrCreateAcc(parentAcc.name,s)
+        subscriber = Subscriber(name=parent+s,
                                 account=a)
         subscriber.save()
