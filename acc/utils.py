@@ -2,12 +2,12 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .models import Account
-from .con import ACC_A, ACC_P, ACC_AP
+from .con import ACC_A, ACC_P, ACC_AP, LZ
 from .serializers import (AccountSerializer, 
                           AssignSerializer, 
                           AccountHistorySerializer, 
                           AssignDetailSerializer)
-import acc.c as c
+
 
 
 def prepareAccHistory(account: Account,
@@ -180,13 +180,30 @@ def assignData(assign_data):
     # raise Exception('Test exception')
     
 
+def getOrCreateAcc(parent: str,
+                   name: str):
+    try:
+        account = Account.objects.get(pk=parent+name)
+        return account
+    except Exception:
+        aParent = Account.objects.get(pk=parent)
+        s = aParent.name + name
+        s = aParent.name+name
+        a = Account(name=s,
+                    acc_type=aParent.acc_type,
+                    parent=aParent,
+                    description=s)
+        a.save()
+        return a
+
+
 def createGroup(parent:str ,
                 suffix:str ,
                 start:str ,
                 end: str):
     aParent = Account.objects.get(pk=parent)
     for i in range(int(start), int(end)+1):
-        s = aParent.name+suffix+str(i).zfill(c.LZ)
+        s = aParent.name+suffix+str(i).zfill(LZ)
         a = Account(name=s,
                     acc_type=aParent.acc_type,
                     parent=aParent,

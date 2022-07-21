@@ -19,15 +19,9 @@ class Subscriber(models.Model):
                             blank=False, unique=True, primary_key=True, default='0')
 
     account = models.OneToOneField(Account, on_delete=models.CASCADE) # TODO
-    accountHistory = models.ForeignKey(
-        AccountHistory, on_delete=models.DO_NOTHING)
+    # accountHistory = models.ForeignKey(
+    #     AccountHistory, on_delete=models.DO_NOTHING)
 
-    parent = models.ForeignKey('self',
-                               default=None,
-                               on_delete=models.PROTECT,
-                               blank=True,
-                               null=True)
-    
     taxes = models.ManyToManyField(Tax)
     assignedTaxes = models.ManyToManyField(AssignedTax)
 

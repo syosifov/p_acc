@@ -1,8 +1,6 @@
 
-from ssl import ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE
-from unicodedata import name
 from django.db import transaction
-from django.db.models.signals import post_save
+
 
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
