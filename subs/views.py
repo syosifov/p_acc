@@ -39,4 +39,20 @@ class TaxView(viewsets.ModelViewSet):       # subs/tax/
     serializer_class = TaxSerializer
     
     
+@api_view(['POST'])     # subs/subscribe_tax/    
+def subscribe_tax(request):
+    taxes = Tax.objects.all()
+    qs = Subscriber.objects.all()
+    print(qs[0])
+    for s in qs:
+        if s.name.find('a') < 0:
+            continue
+        lst = s.name.split('a')
+        n = int(lst[len(lst)-1])
+        if n % 2 == 0:
+            s.taxes.add(taxes[0])
+        else:
+            s.taxes.add(taxes[1])
+        print(s)
+    return Response(status=status.HTTP_201_CREATED)
     
