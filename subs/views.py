@@ -37,10 +37,10 @@ def create_subscriber(request):
 class TaxView(viewsets.ModelViewSet):       # subs/tax/
     queryset = Tax.objects.all()
     serializer_class = TaxSerializer
-    
-    
-@api_view(['POST'])     # subs/subscribe_tax/    
-def subscribe_tax(request):
+
+
+@api_view(['POST'])     # subs/subscribe_tax/
+def subscribe_tax(request):             # TODO to define interface
     taxes = Tax.objects.all()
     qs = Subscriber.objects.all()
     print(qs[0])
@@ -55,4 +55,22 @@ def subscribe_tax(request):
             s.taxes.add(taxes[1])
         print(s)
     return Response(status=status.HTTP_201_CREATED)
-    
+
+
+@api_view(['POST'])     # subs/assign_tax
+def assign_tax(request):
+    tax = Tax.objects.get(pk=1)
+    qs = Subscriber.objects.filter(name__startswith='g001a')
+    try:
+        with transaction.atomic():
+            for subscriber in qs:
+                taxes = subscriber.taxes.all()
+                if tax in taxes:
+                    at = AssignedTax(tax=tax, amount=tax.amount)
+                    at.save()
+                    subscriber.assignedTaxes.add(at)
+                    subscriber.save()
+    except Exception as e:
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(status=status.HTTP_201_CREATED)

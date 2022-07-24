@@ -10,7 +10,7 @@ class Tax(models.Model):
 class AssignedTax(models.Model):
     tax = models.ForeignKey(Tax, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
+    paid = models.BooleanField(default=False)
 
 
 class Subscriber(models.Model):
