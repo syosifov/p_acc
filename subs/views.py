@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import generics, status, viewsets
 
-from .utils import createSubscriber
+from .utils import createSubscriber, аssign1Data
 from .models import Tax, AssignedTax, Subscriber
 from .serializers import TaxSerializer, AssignedTaxSerializer, SubscriberSerializer
 
@@ -59,6 +59,8 @@ def subscribe_tax(request):             # TODO to define interface
 
 @api_view(['POST'])     # subs/assign_tax
 def assign_tax(request):
+    detail = request.data['assignment_name']
+    # '2022.07'
     tax = Tax.objects.get(pk=1)
     qs = Subscriber.objects.filter(name__startswith='g001a')
     try:
@@ -66,10 +68,19 @@ def assign_tax(request):
             for subscriber in qs:
                 taxes = subscriber.taxes.all()
                 if tax in taxes:
-                    at = AssignedTax(tax=tax, amount=tax.amount)
+                    description = f'{subscriber.name} - {tax.name} - {detail}'
+                    assignedTaxes = subscriber.assignedTaxes.filter(description=description)
+                    if(len(assignedTaxes) > 0):
+                        continue
+                    at = AssignedTax(tax=tax, amount=tax.amount, description=description)
                     at.save()
                     subscriber.assignedTaxes.add(at)
                     subscriber.save()
+                    аssign1Data(subscriber.account.name,
+                                '712',
+                                tax.amount,
+                                description)
+                    # raise Exception('Test exception')
     except Exception as e:
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
