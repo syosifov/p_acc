@@ -13,7 +13,7 @@ from .utils import (assignData, generateLedger, debitAcc, creditAcc, createGroup
 from .serializers import AccountSerializer
 
 
-@api_view(['POST'])     #init/
+@api_view(['POST'])     #acc/init/
 @transaction.atomic
 def db_init(request):
     print("Load data")

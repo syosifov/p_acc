@@ -61,7 +61,7 @@ def subscribe_tax(request):             # TODO to define interface
 def assign_tax(request):
     detail = request.data['assignment_name']
     # '2022.07'
-    tax = Tax.objects.get(pk=3)
+    tax = Tax.objects.all()[0]
     qs = Subscriber.objects.filter(name__startswith='g001a')
     try:
         with transaction.atomic():
@@ -81,7 +81,7 @@ def assign_tax(request):
                                             '712',
                                             tax.amount,
                                             description)
-                    at.assign_id = assign_id
+                    at.assign_debit_id = assign_id
                     at.save()
                     # raise Exception('Test exception')
     except Exception as e:
