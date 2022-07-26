@@ -25,6 +25,7 @@ def аssign1Data(debit: str,
     data = {'description': description,
             'lstAssgn': [ad],
             'total': amount}
-    assignData(data)
+    assigned_id = assignData(data)
+    return assigned_id
 
 

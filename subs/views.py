@@ -61,12 +61,13 @@ def subscribe_tax(request):             # TODO to define interface
 def assign_tax(request):
     detail = request.data['assignment_name']
     # '2022.07'
-    tax = Tax.objects.get(pk=1)
+    tax = Tax.objects.get(pk=3)
     qs = Subscriber.objects.filter(name__startswith='g001a')
     try:
         with transaction.atomic():
             for subscriber in qs:
                 taxes = subscriber.taxes.all()
+                
                 if tax in taxes:
                     description = f'{subscriber.name} - {tax.name} - {detail}'
                     assignedTaxes = subscriber.assignedTaxes.filter(description=description)
@@ -76,10 +77,12 @@ def assign_tax(request):
                     at.save()
                     subscriber.assignedTaxes.add(at)
                     subscriber.save()
-                    аssign1Data(subscriber.account.name,
-                                '712',
-                                tax.amount,
-                                description)
+                    assign_id = аssign1Data(subscriber.account.name,
+                                            '712',
+                                            tax.amount,
+                                            description)
+                    at.assign_id = assign_id
+                    at.save()
                     # raise Exception('Test exception')
     except Exception as e:
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)

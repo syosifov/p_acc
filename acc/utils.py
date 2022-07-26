@@ -155,17 +155,21 @@ def assignData(assign_data):
     total = assign_data['total']
     sum = 0
     
-    print(assign_data)
-    print(lstAssign)
+    # print(assign_data)
+    # print(lstAssign)
     
     a_serializer = AssignSerializer(data = assign_data)
+
     if a_serializer.is_valid():
         a_serializer.save()
+
     assign_id = a_serializer.data['id']
+
     for assign_detail in lstAssign:
         assign_detail['assign'] = assign_id
         ad_serializer = AssignDetailSerializer(data=assign_detail)
         v = ad_serializer.run_validation(data=assign_detail)
+
         if ad_serializer.is_valid():
             ad_serializer.save()
             id_assign_detail = ad_serializer.data['id']
@@ -175,9 +179,11 @@ def assignData(assign_data):
             sum += amount
             debitAcc(debit_acc, amount, id_assign_detail)
             creditAcc(credit_acc, amount, id_assign_detail)
+    
     if abs(total - sum) >= 0.0001:
         raise Exception("Accounting data mismatch")
-    # raise Exception('Test exception')
+
+    return assign_id
     
 
 def getOrCreateAcc(parent: str,

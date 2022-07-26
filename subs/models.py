@@ -1,7 +1,7 @@
 from xml.dom.minidom import CharacterData
 from django.db import models
 from django.forms import CharField
-from acc.models import Account, AccountHistory
+from acc.models import Account, AccountHistory, Assign
 
 
 class Tax(models.Model):
@@ -14,6 +14,8 @@ class AssignedTax(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     paid = models.BooleanField(default=False)
     description = models.CharField(max_length=60, default='')
+    assign = models.OneToOneField(Assign, blank=True, null=True, on_delete=models.CASCADE)
+    # TODO 
 
 
 class Subscriber(models.Model):
