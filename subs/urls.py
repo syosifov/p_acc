@@ -4,7 +4,8 @@ from rest_framework.routers import DefaultRouter
 from .views import (create_subscriber, 
                     TaxView, 
                     subscribe_tax, 
-                    assign_tax)
+                    assign_tax,
+                    init)
 
 
 router = DefaultRouter()
@@ -15,5 +16,6 @@ urlpatterns = [
     path('create_subscriber/', create_subscriber),
     path('subscribe_tax/', subscribe_tax),
     path('assign_tax/', assign_tax),
+    path('init/', init),
     path('', include(router.urls)),
 ]
