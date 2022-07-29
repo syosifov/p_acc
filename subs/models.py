@@ -1,6 +1,8 @@
+from turtle import mode
 from xml.dom.minidom import CharacterData
 from django.db import models
 from django.forms import CharField
+from acc.con import A411, A501, A712
 from acc.models import Account, Assign
 
 
@@ -25,17 +27,30 @@ class AssignedTax(models.Model):
     # TODO
 
 
+class Group(models.Model):
+    
+    name = models.CharField(max_length=40, null=False,
+                            blank=False, unique=True, primary_key=True, default='0')
+    a411 = models.OneToOneField(Account, on_delete=models.CASCADE, related_name='a411')
+    a501 = models.OneToOneField(Account, on_delete=models.CASCADE, related_name='a501')
+    a712 = models.OneToOneField(Account, on_delete=models.CASCADE, related_name='a712')
+    
+    parent_group = models.ForeignKey('self',on_delete=models.CASCADE,null=True,blank=True)
+
 class Subscriber(models.Model):
 
-    name = models.CharField(max_length=30, null=False,
+    name = models.CharField(max_length=40, null=False,
                             blank=False, unique=True, primary_key=True, default='0')
 
     account = models.OneToOneField(Account, on_delete=models.CASCADE)  # TODO
-    # accountHistory = models.ForeignKey(
-    #     AccountHistory, on_delete=models.DO_NOTHING)
+    
 
     taxes = models.ManyToManyField(Tax)
     assignedTaxes = models.ManyToManyField(AssignedTax)
+    
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=False, null=False, default='')
 
     def __str__(self) -> str:
         return self.name
+
+

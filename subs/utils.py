@@ -1,8 +1,8 @@
 from django.db import transaction
-from acc.con import A411, LZ
+from acc.con import A411, A501, A712, LZ
 from acc.utils import getOrCreateAcc, assignData
 
-from .models import Subscriber, Tax, AssignedTax
+from .models import Subscriber, Tax, AssignedTax, Group
 
 
 def createSubscriber(parent: str,
@@ -63,14 +63,34 @@ def testAssignTax(tax: Tax):
                                     description)
             at.assign_debit_id = assign_id
             at.save()
-    pass
+
+
+def createGroup(name: str, parent_name: str = ''):
+    
+    group: Group = Group(name=parent_name+name)
+    
+    if parent_name != '':
+        parentGroup: Group = Group.objects.get(name=parent_name)
+        group.a411 = getOrCreateAcc(parentGroup.a411.name, name)
+        group.a501 = getOrCreateAcc(parentGroup.a501.name, name)
+        group.a712 = getOrCreateAcc(parentGroup.a712.name, name)
+        group.parent_group = parentGroup
+    else:
+        group.a411 = getOrCreateAcc(A411, name)
+        group.a501 = getOrCreateAcc(A501, name)
+        group.a712 = getOrCreateAcc(A712, name)
+        
+    group.save()
 
 
 def subsInit(request):
     with transaction.atomic():
-        tax1 = Tax(name="Tax 1", amount=20)
-        tax1.save()
-        createSubscriber('g001', 'a', '1', '4')
-        testSubscribeTax(tax1)
-        testAssignTax(tax1)
+        # tax1 = Tax(name="Tax 1", amount=20)
+        # tax1.save()
+        # createGroup('b001')
+        createGroup('e01', parent_name='b001')
+        # createSubscriber('g001', 'a', '1', '4')
+        # testSubscribeTax(tax1)
+        # testAssignTax(tax1)
+        pass
         
