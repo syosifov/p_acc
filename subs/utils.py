@@ -34,17 +34,13 @@ def аssign1Data(debit: str,
 def testSubscribeTax(tax: Tax):
     qs = Subscriber.objects.all()
     for s in qs:
-        if s.name.find('a') < 0:
-            continue
-        lst = s.name.split('a')
-        n = int(lst[len(lst)-1])
+        n = int(s.name[-1])
         if n % 2 == 0:
             s.taxes.add(tax)
-
         
         
 def testAssignTax(tax: Tax):
-    qs = Subscriber.objects.filter(name__startswith='g001a')
+    qs = Subscriber.objects.all()
     detail = '2022.07.01'
     for subscriber in qs:
         taxes = subscriber.taxes.all()
@@ -92,9 +88,10 @@ def subsInit(request):
         # tax1.save()
         # createGroup('b001')
         # createGroup('e01', parent_name='b001')
-        g = Group.objects.get(pk='b001e01')
-        createSubscriber(g, '1', '4')
-        # testSubscribeTax(tax1)
-        # testAssignTax(tax1)
+        # g = Group.objects.get(pk='b001e01')
+        # createSubscriber(g, '1', '4')
+        tax1 = Tax.objects.all()[0]
+        testSubscribeTax(tax1)
+        testAssignTax(tax1)
         pass
         
