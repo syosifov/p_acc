@@ -5,15 +5,16 @@ from acc.utils import getOrCreateAcc, assignData
 from .models import Subscriber, Tax, AssignedTax, Group
 
 
-def createSubscriber(parent: str,
-                     suffix: str,
+def createSubscriber(group: Group,
                      start: str,
-                     end: str):
-    parentAcc = getOrCreateAcc(A411, parent)
+                     end: str,
+                     suffix: str ='a'):
+    parentAcc = getOrCreateAcc(A411, group.name)
     for i in range(int(start), int(end)+1):
         s = suffix+str(i).zfill(LZ)
         a = getOrCreateAcc(parentAcc.name, s)
-        subscriber = Subscriber(name=parent+s,
+        subscriber = Subscriber(group=group,
+                                name=group.name+s,
                                 account=a)
         subscriber.save()
 
@@ -81,6 +82,8 @@ def createGroup(name: str, parent_name: str = ''):
         group.a712 = getOrCreateAcc(A712, name)
         
     group.save()
+    
+    return group
 
 
 def subsInit(request):
@@ -88,8 +91,9 @@ def subsInit(request):
         # tax1 = Tax(name="Tax 1", amount=20)
         # tax1.save()
         # createGroup('b001')
-        createGroup('e01', parent_name='b001')
-        # createSubscriber('g001', 'a', '1', '4')
+        # createGroup('e01', parent_name='b001')
+        g = Group.objects.get(pk='b001e01')
+        createSubscriber(g, '1', '4')
         # testSubscribeTax(tax1)
         # testAssignTax(tax1)
         pass

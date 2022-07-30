@@ -21,7 +21,8 @@ def create_subscriber(request):
             suffix = ad['suffix']
             start = ad['start']
             end = ad['end']         # inclusive
-            createSubscriber(parent, suffix, start, end)
+            # createSubscriber(parent, suffix, start, end)
+            raise Exception('Test exception')
     except Exception as e:
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
@@ -59,6 +60,7 @@ def init(request):
     try:
         subsInit(request)
     except Exception as e:
+        print(str(e))
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
     return Response(status=status.HTTP_201_CREATED)
