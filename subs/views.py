@@ -64,3 +64,16 @@ def init(request):
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
     return Response(status=status.HTTP_201_CREATED)
+
+
+
+@api_view(['GET'])     # subs/unpaid/
+def unpaid(request):
+    try:
+        a_taxes = AssignedTax.objects.filter(paid = False)
+        at_serializer = AssignedTaxSerializer(data=a_taxes, many=True)
+    except Exception as e:
+        print(str(e))
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(at_serializer.data, status=status.HTTP_201_CREATED)
