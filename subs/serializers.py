@@ -12,7 +12,7 @@ class TaxSerializer(serializers.ModelSerializer):
         
 class AssignedTaxSerializer(serializers.ModelSerializer):
     
-    subscribers = 'SubscriberSerializer'(read_only=True,many=True)
+    # subscribers = 'SubscriberSerializer'(read_only=True,many=True)
     class Meta:
         model = AssignedTax
         fields = '__all__'

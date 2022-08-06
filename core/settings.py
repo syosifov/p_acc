@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'acc',
     'subs',
+    'school',
 ]
 
 REST_FRAMEWORK = {
