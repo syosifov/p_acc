@@ -3,3 +3,14 @@ https://kik-info.com/forum/index.php?topic=15604.0
 40101/712   10    задължение
 501/40101   10    плащане
 712/125     10    приключване 
+
+
+from school.models import Student, Course, Enrollment
+math = Course.objects.get(pk=1)
+math.students.all()
+
+john = Student.objects.get(pk=1)
+john.course_set.all()
+
+https://www.youtube.com/watch?v=-HuTlmEVOgU&ab_channel=PrettyPrinted
+https://github.com/PrettyPrinted/youtube_video_code/tree/master/2020/05/16/Adding%20Extra%20Fields%20On%20Many-To-Many%20Relationships%20in%20Django/many_to_many_extra
