@@ -47,13 +47,14 @@ def testAssignTax(tax: Tax):
         
         if tax in taxes:
             description = f'{subscriber.name} - {tax.name} - {detail}'
-            assignedTaxes = subscriber.assignedTaxes.filter(description=description)
+            assignedTaxes = subscriber.assignedtax_set.filter(description=description)
             if(len(assignedTaxes) > 0):
                 continue
-            at = AssignedTax(tax=tax, amount=tax.amount, description=description)
+            at = AssignedTax(tax=tax, 
+                             amount=tax.amount, 
+                             description=description,
+                             subscriber=subscriber)
             at.save()
-            subscriber.assignedTaxes.add(at)
-            subscriber.save()
             assign_id = аssign1Data(subscriber.account.name,
                                     '712',
                                     tax.amount,

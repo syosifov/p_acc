@@ -13,6 +13,7 @@ class Tax(models.Model):
 
 class AssignedTax(models.Model):
     tax = models.ForeignKey(Tax, on_delete=models.CASCADE)
+    subscriber = models.ForeignKey('Subscriber', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     paid = models.BooleanField(default=False)
     description = models.CharField(max_length=60, default='')
@@ -28,14 +29,19 @@ class AssignedTax(models.Model):
 
 
 class Group(models.Model):
-    
+
     name = models.CharField(max_length=40, null=False,
                             blank=False, unique=True, primary_key=True, default='0')
-    a411 = models.OneToOneField(Account, on_delete=models.CASCADE, related_name='a411')
-    a501 = models.OneToOneField(Account, on_delete=models.CASCADE, related_name='a501')
-    a712 = models.OneToOneField(Account, on_delete=models.CASCADE, related_name='a712')
-    
-    parent_group = models.ForeignKey('self',on_delete=models.CASCADE,null=True,blank=True)
+    a411 = models.OneToOneField(
+        Account, on_delete=models.CASCADE, related_name='a411')
+    a501 = models.OneToOneField(
+        Account, on_delete=models.CASCADE, related_name='a501')
+    a712 = models.OneToOneField(
+        Account, on_delete=models.CASCADE, related_name='a712')
+
+    parent_group = models.ForeignKey(
+        'self', on_delete=models.CASCADE, null=True, blank=True)
+
 
 class Subscriber(models.Model):
 
@@ -43,14 +49,11 @@ class Subscriber(models.Model):
                             blank=False, unique=True, primary_key=True, default='0')
 
     account = models.OneToOneField(Account, on_delete=models.CASCADE)  # TODO
-    
 
     taxes = models.ManyToManyField(Tax)
-    assignedTaxes = models.ManyToManyField(AssignedTax)
-    
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=False, null=False, default='')
+
+    group = models.ForeignKey(
+        Group, on_delete=models.CASCADE, blank=False, null=False, default='')
 
     def __str__(self) -> str:
         return self.name
-
-
