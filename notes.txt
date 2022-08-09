@@ -22,3 +22,6 @@ s1.taxes.all()
 
 tax = Tax.objects.all()[0]
 tax.subscriber_set.all()
+
+chld = Account.objects.filter(parent=a501)
+lst = Account.objects.filter(parent='501')

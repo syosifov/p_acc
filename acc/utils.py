@@ -174,7 +174,13 @@ def assignData(assign_data):
             ad_serializer.save()
             id_assign_detail = ad_serializer.data['id']
             debit_acc = assign_detail['debit_acc']
+            childrens = Account.objects.filter(parent=debit_acc)
+            if len(childrens) > 0:
+                raise Exception(f"{debit_acc} has children. You can't debit it directly.")
             credit_acc = assign_detail['credit_acc']
+            childrens = Account.objects.filter(parent=credit_acc)
+            if len(childrens) > 0:
+                raise Exception(f"{credit_acc} has children. You can't credit it directly.")
             amount = assign_detail['amount']
             sum += amount
             debitAcc(debit_acc, amount, id_assign_detail)

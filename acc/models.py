@@ -7,7 +7,7 @@ import acc.con
 
 
 class Account(models.Model):
-    name = models.CharField(max_length=20, null=False,
+    name = models.CharField(max_length=40, null=False,
                             blank=False, unique=True, primary_key=True, default='0')
     description = models.CharField(
         max_length=100, null=False, blank=False, unique=True, default='Balance')
