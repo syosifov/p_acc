@@ -72,8 +72,9 @@ def unpaid(request):
     try:
         a_taxes = AssignedTax.objects.filter(paid = False)
         at_serializer = AssignedTaxSerializer(data=a_taxes, many=True)
+        at_serializer.is_valid()
     except Exception as e:
         print(str(e))
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
-    return Response(at_serializer.data, status=status.HTTP_201_CREATED)
+    return Response(at_serializer.data, status=status.HTTP_200_OK)
