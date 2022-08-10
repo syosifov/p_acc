@@ -56,7 +56,7 @@ def testAssignTax(tax: Tax):
                              subscriber=subscriber)
             at.save()
             assign_id = аssign1Data(subscriber.account.name,
-                                    '712',
+                                    subscriber.group.a712.name,
                                     tax.amount,
                                     description)
             at.assign_debit_id = assign_id
