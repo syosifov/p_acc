@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
+from decimal import Decimal as D
 
 from .models import Account
 from .con import ACC_A, ACC_P, ACC_AP, LZ
@@ -30,8 +31,8 @@ def prepareAccHistory(account: Account,
 
 
 def debitAcc(name, amount, id_assign_detail):
-
     acc_debit = Account.objects.get(pk=name)
+    amount = D(amount)
     acc_history = prepareAccHistory(acc_debit,
                                     id_assign_detail,
                                     amaount_debit=amount)
@@ -72,6 +73,7 @@ def debitAcc(name, amount, id_assign_detail):
 
 def creditAcc(name, amount, id_assign_detail):
     acc_credit = Account.objects.get(pk=name)
+    amount = D(amount)
     acc_history = prepareAccHistory(acc_credit,
                                     id_assign_detail,
                                     amount_credit=amount)

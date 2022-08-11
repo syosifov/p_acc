@@ -4,7 +4,10 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import generics, status, viewsets
 
-from .utils import createSubscriber, аssign1Data, subsInit, testSubscribeTax, testAssignTax
+from .utils import (subsInit, 
+                    testSubscribeTax, 
+                    testAssignTax,
+                    payTax)
 from .models import Tax, AssignedTax, Subscriber
 from .serializers import TaxSerializer, AssignedTaxSerializer, SubscriberSerializer
 
@@ -13,7 +16,7 @@ from .serializers import TaxSerializer, AssignedTaxSerializer, SubscriberSeriali
 
 @api_view(['POST'])     # subs/create_subscriber/
 def create_subscriber(request):
-   
+
     try:
         with transaction.atomic():
             ad = request.data
@@ -42,7 +45,7 @@ def subscribe_tax(request):             # TODO to define interface
 
 @api_view(['POST'])     # subs/assign_tax
 def assign_tax(request):
-    
+
     tax = Tax.objects.all()[0]
     qs = Subscriber.objects.filter(name__startswith='g001a')
     try:
@@ -59,6 +62,7 @@ def assign_tax(request):
 def init(request):
     try:
         subsInit(request)
+        # raise Exception("Test exception")
     except Exception as e:
         print(str(e))
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
@@ -66,11 +70,10 @@ def init(request):
     return Response(status=status.HTTP_201_CREATED)
 
 
-
 @api_view(['GET'])     # subs/unpaid/
 def unpaid(request):
     try:
-        a_taxes = AssignedTax.objects.filter(paid = False)
+        a_taxes = AssignedTax.objects.filter(paid=False)
         at_serializer = AssignedTaxSerializer(data=a_taxes, many=True)
         at_serializer.is_valid()
     except Exception as e:
@@ -78,3 +81,29 @@ def unpaid(request):
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
     return Response(at_serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])     # subs/pay/
+def pay(request):
+    try:
+        subscriber_id = request.data['subscriber_id']
+        amount = float(request.data['amount'])
+        assigned_tax_id = int(request.data['assigned_tax_id'])
+        payTax(assigned_tax_id,subscriber_id,amount)
+        # raise Exception("Test exception")
+    except Exception as e:
+        print(str(e))
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def fn_template(request):
+    try:
+        pass
+    except Exception as e:
+        print(str(e))
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(status=status.HTTP_200_OK)

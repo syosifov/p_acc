@@ -1,4 +1,6 @@
 from django.db import transaction
+import decimal
+from decimal import Decimal
 from acc.con import A411, A501, A712, LZ
 from acc.utils import getOrCreateAcc, assignData
 
@@ -94,5 +96,19 @@ def subsInit(request):
         tax1 = Tax.objects.all()[0]
         testSubscribeTax(tax1)
         testAssignTax(tax1)
-        pass
+
         
+
+def payTax(assigned_tax_id: int,
+           subscriber_id: str,
+           amount):
+    at = AssignedTax.objects.get(pk=assigned_tax_id)
+    if Decimal(amount) >= Decimal(at.amount):
+        at.paid = True
+    
+    subscriber = Subscriber.objects.get(pk=subscriber_id)
+    аssign1Data(subscriber.group.a501.name,
+                subscriber.account.name,
+                amount,
+                at.description+' paying')
+    
