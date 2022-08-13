@@ -188,7 +188,7 @@ def assignData(assign_data):
             debitAcc(debit_acc, amount, id_assign_detail)
             creditAcc(credit_acc, amount, id_assign_detail)
     
-    if abs(total - sum) >= 0.0001:
+    if abs(total - sum) >= 0.0001:              # TODO
         raise Exception("Accounting data mismatch")
 
     return assign_id

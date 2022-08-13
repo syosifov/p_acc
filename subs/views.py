@@ -7,7 +7,8 @@ from rest_framework import generics, status, viewsets
 from .utils import (subsInit, 
                     testSubscribeTax, 
                     testAssignTax,
-                    payTax)
+                    payTax,
+                    importMoney)
 from .models import Tax, AssignedTax, Subscriber
 from .serializers import TaxSerializer, AssignedTaxSerializer, SubscriberSerializer
 
@@ -39,7 +40,8 @@ class TaxView(viewsets.ModelViewSet):       # subs/tax/
 
 @api_view(['POST'])     # subs/subscribe_tax/
 def subscribe_tax(request):             # TODO to define interface
-    testSubscribeTax()
+    with transaction.atomic():
+        testSubscribeTax()
     return Response(status=status.HTTP_201_CREATED)
 
 
@@ -61,7 +63,8 @@ def assign_tax(request):
 @api_view(['POST'])     # subs/init/
 def init(request):
     try:
-        subsInit(request)
+        with transaction.atomic():
+            subsInit(request)
         # raise Exception("Test exception")
     except Exception as e:
         print(str(e))
@@ -86,22 +89,41 @@ def unpaid(request):
 @api_view(['POST'])     # subs/pay/
 def pay(request):
     try:
-        subscriber_id = request.data['subscriber_id']
-        amount = float(request.data['amount'])
-        assigned_tax_id = int(request.data['assigned_tax_id'])
-        payTax(assigned_tax_id,subscriber_id,amount)
-        # raise Exception("Test exception")
+        with transaction.atomic():
+            subscriber_id = request.data['subscriber_id']
+            amount = float(request.data['amount'])
+            assigned_tax_id = int(request.data['assigned_tax_id'])
+            payTax(assigned_tax_id,subscriber_id,amount)
+            # raise Exception("Test exception")
     except Exception as e:
         print(str(e))
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
-    return Response(status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])         # subs/installment/
+def installment(request):
+    try:
+        with transaction.atomic():
+            subscriber_id = request.data['subscriber_id']
+            amount = (request.data['amount'])
+            description = request.data['description']
+            importMoney(subscriber_id,amount,description)
+            # raise Exception("Test exception")
+    except Exception as e:
+        print(str(e))
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(status=status.HTTP_201_CREATED)
 
 
 @api_view(['POST'])
 def fn_template(request):
     try:
-        pass
+        with transaction.atomic():
+            pass
+        # raise Exception("Test exception")
     except Exception as e:
         print(str(e))
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)

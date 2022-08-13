@@ -1,6 +1,6 @@
 from django.db import transaction
 import decimal
-from decimal import Decimal
+from decimal import Decimal as D
 from acc.con import A411, A501, A712, LZ
 from acc.utils import getOrCreateAcc, assignData
 
@@ -11,13 +11,16 @@ def createSubscriber(group: Group,
                      start: str,
                      end: str,
                      suffix: str ='a'):
-    parentAcc = getOrCreateAcc(A411, group.name)
+    parentAcc411 = getOrCreateAcc(A411, group.name)
+    parentAcc501 = getOrCreateAcc(A501, group.name)
     for i in range(int(start), int(end)+1):
         s = suffix+str(i).zfill(LZ)
-        a = getOrCreateAcc(parentAcc.name, s)
+        a = getOrCreateAcc(parentAcc411.name, s)
+        acc501 = getOrCreateAcc(parentAcc501.name, s)
         subscriber = Subscriber(group=group,
                                 name=group.name+s,
-                                account=a)
+                                a411=a,
+                                a501=acc501)
         subscriber.save()
 
 
@@ -57,7 +60,7 @@ def testAssignTax(tax: Tax):
                              description=description,
                              subscriber=subscriber)
             at.save()
-            assign_id = аssign1Data(subscriber.account.name,
+            assign_id = аssign1Data(subscriber.a411.name,
                                     subscriber.group.a712.name,
                                     tax.amount,
                                     description)
@@ -103,12 +106,43 @@ def payTax(assigned_tax_id: int,
            subscriber_id: str,
            amount):
     at = AssignedTax.objects.get(pk=assigned_tax_id)
-    if Decimal(amount) >= Decimal(at.amount):
+    if D(amount) >= D(at.amount):
         at.paid = True
+        at.save()
     
     subscriber = Subscriber.objects.get(pk=subscriber_id)
-    аssign1Data(subscriber.group.a501.name,
-                subscriber.account.name,
+    аssign1Data(subscriber.a501.name,
+                subscriber.a411.name,
                 amount,
                 at.description+' paying')
-    
+
+
+def importMoney(subscriber_id,
+                amount,
+                description):
+    amount = D(amount)
+    subscriber = Subscriber.objects.get(pk=subscriber_id)
+    atx = subscriber.assignedtax_set.filter(paid=False)
+    for at in atx:
+        if amount >= at.amount:
+            at.paid = True
+            at.save()
+            аssign1Data(subscriber.a501.name,
+                        subscriber.a411.name,
+                        at.amount,
+                        at.description+' paying')
+            amount -= at.amount
+        else:
+            аssign1Data(subscriber.a501.name,
+                        subscriber.a411.name,
+                        amount,
+                        at.description+' from '+description)
+            amount = D(0)
+        
+    if amount > D(0):
+        аssign1Data(subscriber.a501.name,
+                    subscriber.group.a712.name,
+                    amount,
+                    subscriber.name +" "+ description) 
+
+

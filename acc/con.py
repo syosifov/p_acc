@@ -7,3 +7,5 @@ A411 = '411'
 A501 = '501'
 A712 = '712'
 LZ = 3  # leading zeros
+
+MAX_DIGITS = 16

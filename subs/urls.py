@@ -7,7 +7,8 @@ from .views import (create_subscriber,
                     assign_tax,
                     init,
                     unpaid,
-                    pay)
+                    pay,
+                    installment)
 
 
 router = DefaultRouter()
@@ -21,5 +22,6 @@ urlpatterns = [
     path('init/', init),
     path('unpaid/', unpaid),
     path('pay/', pay),
+    path('installment/', installment),
     path('', include(router.urls)),
 ]

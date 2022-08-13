@@ -48,7 +48,12 @@ class Subscriber(models.Model):
     name = models.CharField(max_length=40, null=False,
                             blank=False, unique=True, primary_key=True, default='0')
 
-    account = models.OneToOneField(Account, on_delete=models.CASCADE)  # TODO
+    a411 = models.OneToOneField(
+        Account, on_delete=models.CASCADE, related_name='sa411', null=True, blank=True)
+    # TODO
+    a501 = models.OneToOneField(
+        Account, on_delete=models.CASCADE, related_name='sa501', null=True, blank=True)
+    # TODO
 
     taxes = models.ManyToManyField(Tax)
 
