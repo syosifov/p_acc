@@ -99,23 +99,47 @@ def subsInit(request):
         tax1 = Tax.objects.all()[0]
         testSubscribeTax(tax1)
         testAssignTax(tax1)
-
+    
+    
+def payTheTax(subscriber: Subscriber,
+              amount: D,
+              at: AssignedTax) -> D:
+    amount_to_pay = at.amount-at.amount_paid
+    if amount >= at.amount-at.amount_paid:
+        at.paid = True
+        at.amount_paid = at.amount
+        at.save()
+        аssign1Data(subscriber.a501.name,
+                    subscriber.a411.name,
+                    amount_to_pay,
+                    at.description+' paying')
+        amount -= amount_to_pay
+    else:
+        аssign1Data(subscriber.a501.name,
+                    subscriber.a411.name,
+                    amount,
+                    at.description+" partial")
+        at.amount_paid += D(amount)
+        at.save()
+        amount = D(0)
         
+    return amount
+
 
 def payTax(assigned_tax_id: int,
            subscriber_id: str,
            amount):
+    amount = D(amount)
     at = AssignedTax.objects.get(pk=assigned_tax_id)
-    if D(amount) >= D(at.amount):
-        at.paid = True
-        at.save()
-    
     subscriber = Subscriber.objects.get(pk=subscriber_id)
-    аssign1Data(subscriber.a501.name,
-                subscriber.a411.name,
-                amount,
-                at.description+' paying')
-
+    amount = payTheTax(subscriber,amount,at)
+    
+    if amount > D(0):
+        аssign1Data(subscriber.a501.name,
+                    subscriber.group.a712.name,
+                    amount,
+                    subscriber.name +" "+ "installment") 
+        
 
 def importMoney(subscriber_id,
                 amount,
@@ -124,20 +148,7 @@ def importMoney(subscriber_id,
     subscriber = Subscriber.objects.get(pk=subscriber_id)
     atx = subscriber.assignedtax_set.filter(paid=False)
     for at in atx:
-        if amount >= at.amount:
-            at.paid = True
-            at.save()
-            аssign1Data(subscriber.a501.name,
-                        subscriber.a411.name,
-                        at.amount,
-                        at.description+' paying')
-            amount -= at.amount
-        else:
-            аssign1Data(subscriber.a501.name,
-                        subscriber.a411.name,
-                        amount,
-                        at.description+' from '+description)
-            amount = D(0)
+        amount = payTheTax(subscriber,amount,at)
         
     if amount > D(0):
         аssign1Data(subscriber.a501.name,

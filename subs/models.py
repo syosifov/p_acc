@@ -2,19 +2,23 @@ from turtle import mode
 from xml.dom.minidom import CharacterData
 from django.db import models
 from django.forms import CharField
-from acc.con import A411, A501, A712
+from acc.con import A411, A501, A712, MAX_DIGITS, DECIMAL_PLACES
 from acc.models import Account, Assign
 
 
 class Tax(models.Model):
     name = models.CharField(max_length=40, unique=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    amount = models.DecimalField(
+        max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
 
 
 class AssignedTax(models.Model):
     tax = models.ForeignKey(Tax, on_delete=models.CASCADE)
     subscriber = models.ForeignKey('Subscriber', on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    amount = models.DecimalField(
+        max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
+    amount_paid = models.DecimalField(
+        max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
     paid = models.BooleanField(default=False)
     description = models.CharField(max_length=60, default='')
     assign_debit = models.ForeignKey(

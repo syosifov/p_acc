@@ -9,3 +9,4 @@ A712 = '712'
 LZ = 3  # leading zeros
 
 MAX_DIGITS = 16
+DECIMAL_PLACES = 2
