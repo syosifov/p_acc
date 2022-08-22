@@ -12,7 +12,7 @@ def createSubscriber(group: Group,
                      end: str,
                      suffix: str ='a'):
     parentAcc411 = getOrCreateAcc(A411, group.name)
-    parentAcc412 = getOrCreateAcc(A412, group.name)
+    parentAcc412 = getOrCreateAcc(A412, group.name)0
     parentAcc501 = getOrCreateAcc(A501, group.name)
     for i in range(int(start), int(end)+1):
         s = suffix+str(i).zfill(LZ)
