@@ -2,7 +2,7 @@ from turtle import mode
 from xml.dom.minidom import CharacterData
 from django.db import models
 from django.forms import CharField
-from acc.con import A411, A501, A712, MAX_DIGITS, DECIMAL_PLACES
+from core.con import A411, A501, A712, MAX_DIGITS, DECIMAL_PLACES
 from acc.models import Account, Assign
 
 

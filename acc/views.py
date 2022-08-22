@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .models import Account, Assign, AssignDetail 
-from .con import ACC_A, ACC_P, ACC_AP
+from core.con import ACC_A, ACC_P, ACC_AP
 from .utils import (assignData, generateLedger, debitAcc, creditAcc, createGroup)
 from .serializers import AccountSerializer
 

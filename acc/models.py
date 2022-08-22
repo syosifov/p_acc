@@ -1,7 +1,7 @@
 from django.db import models
 
-import acc.con
-from acc.con import MAX_DIGITS, DECIMAL_PLACES
+import core.con
+from core.con import MAX_DIGITS, DECIMAL_PLACES
 
 # Create your models here.
 
@@ -15,7 +15,7 @@ class Account(models.Model):
         max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
     liabilities = models.DecimalField(
         max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
-    acc_type = models.IntegerField(default=acc.con.ACC_AP)
+    acc_type = models.IntegerField(default=core.con.ACC_AP)
     balance = models.DecimalField(
         max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
 

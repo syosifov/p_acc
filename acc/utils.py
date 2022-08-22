@@ -3,7 +3,7 @@ from rest_framework import status
 from decimal import Decimal as D
 
 from .models import Account
-from .con import ACC_A, ACC_P, ACC_AP, LZ
+from core.con import ACC_A, ACC_P, ACC_AP, LZ
 from .serializers import (AccountSerializer, 
                           AssignSerializer, 
                           AccountHistorySerializer, 

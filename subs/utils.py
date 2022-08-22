@@ -1,7 +1,7 @@
 from django.db import transaction
 import decimal
 from decimal import Decimal as D
-from acc.con import A411, A412, A501, A712, LZ
+from core.con import A411, A412, A501, A712, LZ
 from acc.utils import getOrCreateAcc, assignData
 
 from .models import Subscriber, Tax, AssignedTax, Group
