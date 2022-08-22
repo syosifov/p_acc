@@ -6,6 +6,7 @@
 4 | ACCOUNTS FOR SETTLEMENTS
 41 | Customers and Related Accounts
 411 | Receivables from customers | Active | Analytical
+412 | Liabilities to customers | Passive | Analytical
 5 | ACCOUNTS FOR FINANCIAL RESOURCES
 50 | Cash
 501 | Cash register in BGN | Active | Analytical

@@ -1,7 +1,7 @@
 from django.db import transaction
 import decimal
 from decimal import Decimal as D
-from acc.con import A411, A501, A712, LZ
+from acc.con import A411, A412, A501, A712, LZ
 from acc.utils import getOrCreateAcc, assignData
 
 from .models import Subscriber, Tax, AssignedTax, Group
@@ -12,14 +12,17 @@ def createSubscriber(group: Group,
                      end: str,
                      suffix: str ='a'):
     parentAcc411 = getOrCreateAcc(A411, group.name)
+    parentAcc412 = getOrCreateAcc(A412, group.name)
     parentAcc501 = getOrCreateAcc(A501, group.name)
     for i in range(int(start), int(end)+1):
         s = suffix+str(i).zfill(LZ)
-        a = getOrCreateAcc(parentAcc411.name, s)
+        acc411 = getOrCreateAcc(parentAcc411.name, s)
+        acc412 = getOrCreateAcc(parentAcc412.name, s)
         acc501 = getOrCreateAcc(parentAcc501.name, s)
         subscriber = Subscriber(group=group,
                                 name=group.name+s,
-                                a411=a,
+                                a411=acc411,
+                                a412=acc412,
                                 a501=acc501)
         subscriber.save()
 
@@ -75,11 +78,13 @@ def createGroup(name: str, parent_name: str = ''):
     if parent_name != '':
         parentGroup: Group = Group.objects.get(name=parent_name)
         group.a411 = getOrCreateAcc(parentGroup.a411.name, name)
+        group.a412 = getOrCreateAcc(parentGroup.a412.name, name)
         group.a501 = getOrCreateAcc(parentGroup.a501.name, name)
         group.a712 = getOrCreateAcc(parentGroup.a712.name, name)
         group.parent_group = parentGroup
     else:
         group.a411 = getOrCreateAcc(A411, name)
+        group.a412 = getOrCreateAcc(A412, name)
         group.a501 = getOrCreateAcc(A501, name)
         group.a712 = getOrCreateAcc(A712, name)
         

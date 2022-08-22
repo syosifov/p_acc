@@ -4,6 +4,7 @@ ACC_AP: int = 2
 
 
 A411 = '411'
+A412 = '412'
 A501 = '501'
 A712 = '712'
 LZ = 3  # leading zeros

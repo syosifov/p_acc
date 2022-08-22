@@ -37,11 +37,13 @@ class Group(models.Model):
     name = models.CharField(max_length=40, null=False,
                             blank=False, unique=True, primary_key=True, default='0')
     a411 = models.OneToOneField(
-        Account, on_delete=models.CASCADE, related_name='a411')
+        Account, on_delete=models.CASCADE, related_name='a411', null=True, blank=True)
+    a412 = models.OneToOneField(
+        Account, on_delete=models.CASCADE, related_name='a412', null=True, blank=True)
     a501 = models.OneToOneField(
-        Account, on_delete=models.CASCADE, related_name='a501')
+        Account, on_delete=models.CASCADE, related_name='a501', null=True, blank=True)
     a712 = models.OneToOneField(
-        Account, on_delete=models.CASCADE, related_name='a712')
+        Account, on_delete=models.CASCADE, related_name='a712', null=True, blank=True)
 
     parent_group = models.ForeignKey(
         'self', on_delete=models.CASCADE, null=True, blank=True)
@@ -54,6 +56,9 @@ class Subscriber(models.Model):
 
     a411 = models.OneToOneField(
         Account, on_delete=models.CASCADE, related_name='sa411', null=True, blank=True)
+    # TODO
+    a412 = models.OneToOneField(
+        Account, on_delete=models.CASCADE, related_name='sa412', null=True, blank=True)
     # TODO
     a501 = models.OneToOneField(
         Account, on_delete=models.CASCADE, related_name='sa501', null=True, blank=True)
