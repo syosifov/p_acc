@@ -12,7 +12,7 @@ def createSubscriber(group: Group,
                      end: str,
                      suffix: str ='a'):
     parentAcc411 = getOrCreateAcc(A411, group.name)
-    parentAcc412 = getOrCreateAcc(A412, group.name)0
+    parentAcc412 = getOrCreateAcc(A412, group.name)
     parentAcc501 = getOrCreateAcc(A501, group.name)
     for i in range(int(start), int(end)+1):
         s = suffix+str(i).zfill(LZ)
@@ -151,14 +151,9 @@ def importMoney(subscriber_id,
                 description):
     amount = D(amount)
     subscriber = Subscriber.objects.get(pk=subscriber_id)
-    atx = subscriber.assignedtax_set.filter(paid=False)
-    for at in atx:
-        amount = payTheTax(subscriber,amount,at)
-        
-    if amount > D(0):
-        аssign1Data(subscriber.a501.name,
-                    subscriber.group.a712.name,
-                    amount,
-                    subscriber.name +" "+ description) 
-
+    аssign1Data(subscriber.a501.name,
+                subscriber.a412.name,
+                amount,
+                subscriber.name +" "+ description)
+    
 

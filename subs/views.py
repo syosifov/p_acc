@@ -2,7 +2,7 @@ from django.db import transaction
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework import generics, status, viewsets
+from rest_framework import status, viewsets
 
 from .utils import (subsInit, 
                     testSubscribeTax, 
@@ -118,14 +118,3 @@ def installment(request):
     return Response(status=status.HTTP_201_CREATED)
 
 
-@api_view(['POST'])
-def fn_template(request):
-    try:
-        with transaction.atomic():
-            pass
-        # raise Exception("Test exception")
-    except Exception as e:
-        print(str(e))
-        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
-
-    return Response(status=status.HTTP_200_OK)
