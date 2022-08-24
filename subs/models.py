@@ -19,7 +19,7 @@ class AssignedTax(models.Model):
         max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
     amount_paid = models.DecimalField(
         max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
-    paid = models.BooleanField(default=False)
+    is_paid = models.BooleanField(default=False)
     description = models.CharField(max_length=60, default='')
     assign_debit = models.ForeignKey(
         Assign, blank=True, null=True, on_delete=models.CASCADE, related_name='ad')

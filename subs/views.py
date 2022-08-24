@@ -90,10 +90,8 @@ def unpaid(request):
 def pay(request):
     try:
         with transaction.atomic():
-            subscriber_id = request.data['subscriber_id']
-            amount = float(request.data['amount'])
             assigned_tax_id = int(request.data['assigned_tax_id'])
-            payTax(assigned_tax_id,subscriber_id,amount)
+            payTax(assigned_tax_id)
             # raise Exception("Test exception")
     except Exception as e:
         print(str(e))

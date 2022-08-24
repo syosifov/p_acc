@@ -111,7 +111,7 @@ def payTheTax(subscriber: Subscriber,
               at: AssignedTax) -> D:
     amount_to_pay = at.amount-at.amount_paid
     if amount >= at.amount-at.amount_paid:
-        at.paid = True
+        at.is_paid = True
         at.amount_paid = at.amount
         at.save()
         аssign1Data(subscriber.a501.name,
@@ -131,20 +131,28 @@ def payTheTax(subscriber: Subscriber,
     return amount
 
 
-def payTax(assigned_tax_id: int,
-           subscriber_id: str,
-           amount):
-    amount = D(amount)
+def payTax(assigned_tax_id: int):
     at = AssignedTax.objects.get(pk=assigned_tax_id)
-    subscriber = Subscriber.objects.get(pk=subscriber_id)
-    amount = payTheTax(subscriber,amount,at)
-    
-    if amount > D(0):
-        аssign1Data(subscriber.a501.name,
-                    subscriber.group.a712.name,
-                    amount,
-                    subscriber.name +" "+ "installment") 
-        
+    subscriber = at.subscriber
+    amount_to_pay = at.amount - at.amount_paid
+    a411 = subscriber.a411
+    a412 = subscriber.a412
+    if a412.balance >= amount_to_pay:
+        at.is_paid = True
+        at.amount_paid = at.amount
+        at.save()
+        аssign1Data(a412.name,
+                    a411.name,
+                    amount_to_pay,
+                    at.description+' paid')
+    else:
+        at.amount_paid += D(a412.balance)
+        at.save()
+        аssign1Data(a412.name,
+                    a411.name,
+                    a412.balance,
+                    at.description+' partial')
+
 
 def importMoney(subscriber_id,
                 amount,
