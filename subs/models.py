@@ -21,14 +21,14 @@ class AssignedTax(models.Model):
         max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
     is_paid = models.BooleanField(default=False)
     description = models.CharField(max_length=60, default='')
-    assign_debit = models.ForeignKey(
-        Assign, blank=True, null=True, on_delete=models.CASCADE, related_name='ad')
-    assign_credit = models.ForeignKey(
-        Assign, blank=True, null=True, on_delete=models.CASCADE, related_name='ac')
-    assign_debit_reversed = models.ForeignKey(
-        Assign, blank=True, null=True, on_delete=models.CASCADE, related_name='adr')
-    assign_credit_reversed = models.ForeignKey(
-        Assign, blank=True, null=True, on_delete=models.CASCADE, related_name='acf')
+    # assign_debit = models.ForeignKey(
+    #     Assign, blank=True, null=True, on_delete=models.CASCADE, related_name='ad')
+    # assign_credit = models.ForeignKey(
+    #     Assign, blank=True, null=True, on_delete=models.CASCADE, related_name='ac')
+    # assign_debit_reversed = models.ForeignKey(
+    #     Assign, blank=True, null=True, on_delete=models.CASCADE, related_name='adr')
+    # assign_credit_reversed = models.ForeignKey(
+    #     Assign, blank=True, null=True, on_delete=models.CASCADE, related_name='acf')
     # TODO
 
 

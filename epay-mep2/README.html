@@ -1,0 +1,409 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ePay.bg комуникационен пакет за търговци</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#epay_bg_________________________________">ePay.bg комуникационен пакет за търговци</a></li>
+	<ul>
+
+		<li><a href="#i_______________________web_________">I. Заявка за плащане от WEB търговец</a></li>
+		<li><a href="#ii_______________________web_____________________________________________">II. Заявка за плащане от WEB търговец (директно плащане с кредитна карта)</a></li>
+		<li><a href="#iii____________________________________">III. Заявка за плащане - ``Свободен превод''</a></li>
+		<li><a href="#iv___________________________________">IV. Заявка за плащане -  ``Вносна бележка''</a></li>
+	</ul>
+
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="epay_bg_________________________________">ePay.bg комуникационен пакет за търговци</a></h1>
+<pre>
+ ePay.bg &lt;office@epay.bg&gt;, &lt;epay2_demo@epay.bg&gt;
+______________________________________________________________________</pre>
+<p><em>Пакетът се състои от следните файлове:</em></p>
+<dl>
+<dt><strong><a name="item_demo_2ecgi">demo.cgi</a></strong>
+
+<dd>
+<p>- примерна заявка за плащане написана на Perl</p>
+</dd>
+</li>
+<dt><strong><a name="item_demo_2ephp">demo.php</a></strong>
+
+<dd>
+<p>- примерна заявка за плащане написана на PHP</p>
+</dd>
+</li>
+<dt><strong><a name="item_demo_recv_2ecgi">demo_recv.cgi</a></strong>
+
+<dd>
+<p>- пример за получаване на известие относно регистрирано искане за 
+плащане (Платено или Отказано) написан на Perl</p>
+</dd>
+</li>
+<dt><strong><a name="item_demo_recv_2ephp">demo_recv.php</a></strong>
+
+<dd>
+<p>- пример за получаване на известие относно регистрирано искане за 
+плащане (Платено или Отказано) написан на PHP</p>
+</dd>
+</li>
+<dt><strong><a name="item_demo_2ehtml">demo.html</a></strong>
+
+<dd>
+<p>- примерна заявка за Свободен превод към регистриран потребител/търговец</p>
+</dd>
+</li>
+<dt><strong><a name="item_demo_vnbel_2ecgi">demo_vnbel.cgi</a></strong>
+
+<dd>
+<p>- примерна заявка за Вносна бележка</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<h2><a name="i_______________________web_________">I. Заявка за плащане от WEB търговец</a></h2>
+<p>______________________________________________________________________</p>
+<p><strong>Схема:</strong></p>
+<ol>
+<li>
+<p>Клиент на WEB търговец прави поръчка в електронния му магазин</p>
+</li>
+<li>
+<p>След като е готов с поръчката, клиентът формира искане да плати</p>
+</li>
+<li>
+<p>Търговецът изготвя пакет - заявка за плащане и препраща клиента 
+към ePay.bg системата, като подава по описания по-долу начин заявката 
+за плащане</p>
+</li>
+<li>
+<p>След успешен вход на клиента в ePay.bg системата, заявката за плащане 
+(ако е коректно подадена) се <strong>регистрира/записва</strong> като чакащо задължение 
+към дадения търговец. <strong>Ако клиентът се откаже без да прави вход или не</strong> 
+<strong>направи успешен такъв в ePay.bg, заявката за плащане НЕ се записва в</strong> 
+<strong>системата</strong></p>
+</li>
+<li>
+<p>Клиентът може да плати задължението или да го остави за по-късно</p>
+</li>
+<li>
+<p>ePay.bg системата следи за статуса на <strong>регистрираните/записаните</strong> чакащи 
+задължения и при плащане, отказване или изтичане се изпраща известие на 
+търговеца за тях</p>
+</li>
+<li>
+<p>При получаване на известие от ePay.bg, търговецът трябва да формира 
+съответен отговор</p>
+</li>
+</ol>
+<pre>
+ Търговец    --[ЗАЯВКА ЗА ПЛАЩАНЕ]--&gt;            ePay.bg
+ Клиент      --[ВХОД]--[ЗАПИС НА ЗАЯВКАТА]--&gt;    ePay.bg
+ ePay.bg     --[ИЗВЕСТИЕ]--&gt;                     Търговец
+ Търговец    --[ОТГОВОР НА ИЗВЕСТИЕ]--&gt;          ePay.bg</pre>
+<p>Всеки регистриран в системата търговец има генерирани <strong>буквено-цифрена</strong> 
+<strong>секретна дума с дължина 64</strong> и <strong>идентификационен номер (КИН)</strong>. 
+Търговецът може да ги види в личните си данни без да може да ги променя.</p>
+<p><strong>A. Заявката за плащане</strong> се изпраща като HTTP POST заявка към <a href="https://www.epay.bg/">https://www.epay.bg/</a></p>
+<p><strong>Пример:</strong></p>
+<pre>
+ &lt;form action=&quot;https://www.epay.bg/&quot; method=post&gt;
+ &lt;input type=hidden name=PAGE value=&quot;paylogin&quot;&gt;
+ &lt;input type=hidden name=ENCODED value=&quot;[ENCODED]&quot;&gt;
+ &lt;input type=hidden name=CHECKSUM value=&quot;[CHECKSUM]&quot;&gt;
+ &lt;input type=hidden name=URL_OK value=&quot;<a href="http://...">http://...</a>&quot;&gt;
+ &lt;input type=hidden name=URL_CANCEL value=&quot;<a href="http://...">http://...</a>&quot;&gt;
+ &lt;input type=submit&gt;
+ &lt;/form&gt;</pre>
+<p><strong>(*) Ако се използва ePay.bg DEMO системата на адрес:</strong>
+<a href="https://demo.epay.bg/,">https://demo.epay.bg/,</a> <strong>то ТЕСТОВИТЕ заявки за плащане</strong>
+<strong>се изпращат към него!!!</strong></p>
+<p>Задължителните полета са: PAGE, ENCODED и CHECKSUM, като стойността на 
+PAGE задължително е ``paylogin''.
+</p>
+<pre>
+
+Полетата URL_OK и URL_CANCEL са опционални:</pre>
+<pre>
+ URL_OK      - URL на което клиента да бъде препратен в случай, че
+               потвърди плащането (не гарантира, че плащането е извършено)
+ URL_CANCEL  - URL на което клиента да бъде препратен в случай, че 
+               откаже плащането за момента (може да го плати или откаже 
+               по-късно, но не след указаната дата от търговеца)</pre>
+<p><strong>Подписване на заявката за плащане</strong></p>
+<pre>
+ ENCODED     - кодирана с base64 (RFC 3548) заявка за плащане, EOL=''
+ CHECKSUM    - контролна сума върху ENCODED, генерирана като HMAC с 
+               алгоритъм SHA-1 и секретната дума на търговеца.
+</pre>
+<p><strong>Perl примерен код:</strong> {</p>
+<pre>
+ # Кодиране на заявката
+ $ENCODED  = encode_base64('DATA', ''); # '' за EOL (def. е &quot;\n&quot;)</pre>
+<pre>
+ # Генериране на контролна сума
+ $CHECKSUM = hmac_hex($ENCODED, $secret, \&amp;sha1);</pre>
+<p>}</p>
+<p><strong>PHP примерен код:</strong> {</p>
+<pre>
+ # Кодиране на заявката
+ $ENCODED  = base64_encode('DATA');</pre>
+<pre>
+ # Генериране на контролна сума
+ $CHECKSUM = hmac('sha1', $ENCODED, $secret);
+ # кода на функцията hmac може да видите в demo.php</pre>
+<p>}</p>
+<p><strong>Примерна заявка за плащане:</strong></p>
+<pre>
+ MIN=1000000000      (зад. MIN или EMAIL   Идентификационен номер на търговеца)
+ EMAIL=a@merch.bg    (зад. MIN или EMAIL   E-mail на търговеца в системата)
+ INVOICE=123456      (задължително         Номер фактура)
+ AMOUNT=22.80        (задължително         Сума)
+ CURRENCY=BGN        (опционално           Валута - BGN, USD или EUR)
+ EXP_TIME=01.08.2020 (задължително         Крайна дата/час за плащане)
+ DESCR=Test          (опционално           Описание до 100 символа)
+ ENCODING=utf-8      (опционално           encoding на DESCR параметъра)</pre>
+<pre>
+ (*) в заявката се подава MIN или EMAIL за идентифициране на търговеца</pre>
+<pre>
+ Допълнителни опции:
+ -------------------
+ a) отстъпки при плащане с определени карти
+ DISCOUNT=cardbin1,cardbin2,cardbin3:amount1
+ DISCOUNT=cardbin4,cardbin5,cardbin6:amount2</pre>
+<p>Не е задължитено да са подредени точно в този ред.</p>
+<pre>
+ MIN      - съответсва на КИН в личните данни на търговеца
+ EMAIL    - e-mail на търговеца, с който той е регистриран
+ INVOICE  - само цифри
+ AMOUNT   - валидна сума &gt; 0.01 ( например: 22, 22.8, 22.80 )
+ CURRENCY - приемани валути са BGN, USD или EUR; ако не бъде подадено е BGN по подразбиране
+ DESCR    - CP1251 символи, ако не е подаден друг ENCODING 
+ ENCODING - приема се само utf-8; може да се подаде и като HTTP параметър</pre>
+<p>За полето EXP_TIME е валиден следния формат:</p>
+<pre>
+ EXP_TIME=DD.MM.YYYY[ hh:mm[:ss]]
+ 
+ EXP_TIME=01.08.2020
+ EXP_TIME=01.08.2020 23:15    (може да се подаде и с час:мин)
+ EXP_TIME=01.08.2020 23:15:30 (може да се подаде и с час:мин:сек)</pre>
+<p>След като заявката за плащане е регистрирана за клиента, то 
+системата ще извести търговеца за състоянието на плащането: 'Платено',
+'Отказано' или 'Изтекло'.Ако клиентът не потвърди или откаже искането
+преди подадената крайна дата, то ще се маркира като изтекло.</p>
+<p>Заявка с даден INVOICE може да влезе в системата ЕДИН единствен път и
+чака за 'потвърждаване' или 'отказване' от клиента.</p>
+<p><strong>B. Известието на системата</strong> се изпраща на зададено от търговеца URL като 
+HTTP POST заявка, на която търговеца връща отговор в същата HTTP сесия.</p>
+<p><strong>Подписване на известието за плащане</strong></p>
+<pre>
+ ENCODED     - кодирано с base64 (RFC 3548) известие, EOL=''
+ CHECKSUM    - контролна сума върху ENCODED, генерирана като HMAC с 
+               алгоритъм SHA-1 и секретната дума на търговеца.
+</pre>
+<p><strong>Perl примерен код:</strong> {</p>
+<pre>
+ $data = decode_base64($ENCODED);
+ 
+ # Калкулиране на контролната сума
+ # Трябва $CHECKSUM_CALC == $CHECKSUM
+ $CHECKSUM_CALC = hmac_hex($ENCODED, $secret, \&amp;sha1);</pre>
+<p>}</p>
+<p><strong>PHP примерен код:</strong> {</p>
+<pre>
+ $data = base64_decode($ENCODED);</pre>
+<pre>
+ # Калкулиране на контролната сума
+ # Трябва $CHECKSUM_CALC == $CHECKSUM
+ $CHECKSUM_CALC = hmac('sha1', $ENCODED, $secret);
+ # кода на функцията hmac може да видите в demo.php</pre>
+<p>}</p>
+<p><strong>Примерно известие от ePay.bg:</strong></p>
+<pre>
+ INVOICE=123456:STATUS=PAID:PAY_TIME=YYYYMMDDhhmmss:STAN=[6 числа]:BCODE=[6 числа/букви]
+ INVOICE=123457:STATUS=DENIED
+ INVOICE=123457:STATUS=EXPIRED</pre>
+<pre>
+ (*) ако плащането е с ползване на отстъпка (пимерно с БИН на карта cardbin2 - сума amount1), то известието ще бъде:
+ INVOICE=123456:STATUS=PAID:PAY_TIME=YYYYMMDDhhmmss:STAN=[6 числа]:BCODE=[6 числа/букви]:AMOUNT=amount1:BIN=cardbin2
+ 
+ STATUS=[PAID | DENIED | EXPIRED] - Платено | Отказано | Изтекло
+ PAY_TIME                         - Дата/час/сек на плащането
+ STAN                             - Номер транзакция
+ BCODE                            - Авторизационен код на БОРИКА
+ 
+ AMOUNT                           - Платена сума, подава се САМО при отстъпка
+ BIN                              - БИН на карта, подава се САМО при отстъпка</pre>
+<p>За <strong>всеки номер на фактура в известието</strong>, търговеца трябва да 
+върне статус: 
+ OK  - ако всичко е наред
+ ERR - за грешка
+ NO  - ако не знае за тази фактура
+При връщане на OK или NO системета спира да изпраща известие за 
+съответната фактура.</p>
+<p><strong>Примерен отговор на търговеца:</strong></p>
+<pre>
+ INVOICE=123456:STATUS=OK
+ INVOICE=123457:STATUS=ERR
+ INVOICE=123458:STATUS=NO</pre>
+<p>Ако нещо не е коректно в известието изпратено от ePay.bg системата
+търговецът връща ERR=описание.</p>
+<p><strong>Пример:</strong></p>
+<pre>
+ ERR=описание за глобалната грешка (примерно невярна CHECKSUM)</pre>
+<p>Ако търговецът не е заявил URL, на което да получава известия за 
+плащанията, не иска или няма възможност да обработва тези известия,
+то търговецът може да си вижда статуса на исканията за плащане в 
+ePay.bg системата.</p>
+<p>Ако ePay.bg не маркира дадена фактура като получена от търговеца 
+(примерно върнат статус ERR или пропаднала комуникация) системата ще 
+се опита да изпрати пропадналите известия отново.</p>
+<p><strong>Схема за изпращане на известия по дадена фактура:</strong></p>
+<pre>
+ 1) 5 опита през &lt; 1 минута
+ 2) 4 опита през 15 минути
+ 3) 5 опита през 1 час
+ 4) 6 опита през 3 часа
+ 5) 4 опита през 6 часа
+ 6) 1 опит на ден</pre>
+<p><strong>Системата спира да изпраща известие за дадена фактура, ако то не</strong>
+<strong>бъде получено от търговеца в продължение на 30 дена.</strong></p>
+<p>
+</p>
+<h2><a name="ii_______________________web_____________________________________________">II. Заявка за плащане от WEB търговец (директно плащане с кредитна карта)</a></h2>
+<p>______________________________________________________________________</p>
+<p>Схемата е еднаква като при ``<strong>(I) Заявка за плащане от WEB търговец</strong>, 
+с тази разлика, че PAGE=credit_paydirect.</p>
+<p><strong>Пример:</strong></p>
+<pre>
+ &lt;form action=&quot;https://www.epay.bg/&quot; method=post&gt;
+ &lt;input type=hidden name=PAGE value=&quot;credit_paydirect&quot;&gt;
+ &lt;input type=hidden name=LANG value=&quot;[LANG]&quot;&gt;
+ &lt;input type=hidden name=ENCODED value=&quot;[ENCODED]&quot;&gt;
+ &lt;input type=hidden name=CHECKSUM value=&quot;[CHECKSUM]&quot;&gt;
+ &lt;input type=hidden name=URL_OK value=&quot;<a href="http://...">http://...</a>&quot;&gt;
+ &lt;input type=hidden name=URL_CANCEL value=&quot;<a href="http://...">http://...</a>&quot;&gt;
+ &lt;input type=submit&gt;
+ &lt;/form&gt;</pre>
+<pre>
+ LANG = bg | en</pre>
+<p><strong>(*) Ако се използва ePay.bg DEMO системата на адрес:</strong>
+<a href="https://demo.epay.bg/,">https://demo.epay.bg/,</a> <strong>то ТЕСТОВИТЕ заявки за плащане</strong>
+<strong>се изпращат към него!!!</strong></p>
+<p>
+</p>
+<h2><a name="iii____________________________________">III. Заявка за плащане - ``Свободен превод''</a></h2>
+<p>______________________________________________________________________</p>
+<p>Платената сума от клиента постъпва по Микросметка на получателя.
+Необходимо е клиента и получателя на плащането да са регистрирани в 
+ePay.bg</p>
+<p>Заявката за ``Свободен превод'' се изпраща като HTTP POST заявка към 
+<a href="https://www.epay.bg/">https://www.epay.bg/</a></p>
+<p><strong>Пример:</strong></p>
+<pre>
+ &lt;form action=&quot;https://www.epay.bg/&quot; method=post&gt;
+ &lt;input type=hidden name=PAGE value=&quot;paylogin&quot;&gt;
+ &lt;input type=hidden name=MIN value=&quot;[MIN]&quot;&gt;
+ &lt;input type=hidden name=INVOICE value=&quot;[INVOICE]&quot;&gt;
+ &lt;input type=hidden name=TOTAL value=&quot;[TOTAL]&quot;&gt;
+ &lt;input type=hidden name=DESCR value=&quot;[DESCR]&quot;&gt;
+ &lt;input type=hidden name=ENCODING value=&quot;[ENCODING]&quot;&gt;
+ &lt;input type=hidden name=URL_OK value=&quot;<a href="http://...">http://...</a>&quot;&gt;
+ &lt;input type=hidden name=URL_CANCEL value=&quot;<a href="http://...">http://...</a>&quot;&gt;
+ &lt;input type=submit&gt;
+ &lt;/form&gt;</pre>
+<p>Задължително стойността на PAGE е ``paylogin''.</p>
+<pre>
+ MIN       (задължително Идентификационен номер в ePay.bg)
+ INVOICE   (опционално   Номер фактура)
+ TOTAL     (задължително Сума)
+ DESCR     (опционално   Описание до 100 символа)
+ ENCODING  (опционално   encoding на DESCR параметъра)</pre>
+<pre>
+ MIN      - само цифри ( съответсва на КИН в личните данни на получателя )
+ INVOICE  - само цифри
+ TOTAL    - валидна сума &gt; 0.01 ( например: 22, 22.8, 22.80 )
+ DESCR    - CP1251 символи, ако не е подаден друг ENCODING 
+ ENCODING - приема се само utf-8</pre>
+<p>Еквивалентно на TOTAL се приема и AMOUNT.</p>
+<p><strong>Схема:</strong></p>
+<pre>
+ Наредител   --[ЗАЯВКА СВОБОДЕН ПРЕВОД]--&gt;       ePay.bg
+ Клиент      --[ВХОД]--[ЗАПИС НА ЗАЯВКАТА]--&gt;    ePay.bg</pre>
+<p>Полетата URL_OK и URL_CANCEL са опционални:</p>
+<pre>
+ URL_OK      - URL на което клиента да бъде препратен в случай, че
+               потвърди плащането (не гарантира, че плащането е извършено)
+ URL_CANCEL  - URL на което клиента да бъде препратен в случай, че 
+               откаже плащането</pre>
+<p>При тази схема на плащане няма подписване на завките и изпращане на 
+известия към търговеца за статуса на плащането.</p>
+<p>
+</p>
+<h2><a name="iv___________________________________">IV. Заявка за плащане -  ``Вносна бележка''</a></h2>
+<p>______________________________________________________________________</p>
+<p>Платените суми от клиенти на ePay.bg постъпват по посочена от търговеца 
+банкова сметка</p>
+<p>Заявката за ``Вносна бележка'' се изпраща като HTTP POST заявка към 
+<a href="https://www.epay.bg/">https://www.epay.bg/</a></p>
+<p><strong>Пример:</strong></p>
+<pre>
+ &lt;form action=&quot;https://www.epay.bg/&quot; method=post&gt;
+ &lt;input type=hidden name=PAGE value=&quot;paylogin&quot;&gt;
+ &lt;input type=hidden name=MERCHANT value=&quot;[MERCHANT]&quot;&gt;
+ &lt;input type=hidden name=IBAN value=&quot;[IBAN]&quot;&gt;
+ &lt;input type=hidden name=BIC value=&quot;[BIC]&quot;&gt;
+ &lt;input type=hidden name=TOTAL value=&quot;[TOTAL]&quot;&gt;
+ &lt;input type=hidden name=STATEMENT value=&quot;[STATEMENT]&quot;&gt;
+ &lt;input type=hidden name=PSTATEMENT value=&quot;[PSTATEMENT]&quot;&gt;
+ &lt;input type=hidden name=URL_OK value=&quot;<a href="http://...">http://...</a>&quot;&gt;
+ &lt;input type=hidden name=URL_CANCEL value=&quot;<a href="http://...">http://...</a>&quot;&gt;
+ &lt;input type=submit&gt;
+ &lt;/form&gt;</pre>
+<p>Задължително стойността на PAGE е ``paylogin''.</p>
+<pre>
+ MERCHANT     (задължително Получател на превода)
+ IBAN         (задължително IBAN на получателя)
+ BIC          (задължително BIC на банката получател)
+ TOTAL        (задължително Сума)
+ STATEMENT    (задължително Основание)
+ PSTATEMENT   (ако е нужно  Вид плащане)</pre>
+<pre>
+ MERCHANT   - кирилица, латиница, цифри, интервали, '-', ',', '.'
+ IBAN       - валиден IBAN на получателя
+ BIC        - валиден BIC на банката получател
+ TOTAL      - валидна сума &gt; 0.01 ( например: 22, 22.8, 22.80 )
+ STATEMENT  - кирилица, латиница, цифри, интервали, '-', ',', '.'
+ PSTATEMENT - 6 цифри, валиден вид плащане</pre>
+<p><strong>Схема:</strong></p>
+<pre>
+ Наредител   --[ЗАЯВКА ВНОСНА БЕЛЕЖКА]--&gt;        ePay.bg
+ Клиент      --[ВХОД]--[ЗАПИС НА ЗАЯВКАТА]--&gt;    ePay.bg</pre>
+<p>Полетата URL_OK и URL_CANCEL са опционални:</p>
+<pre>
+ URL_OK      - URL на което клиента да бъде препратен в случай, че
+               потвърди плащането (не гарантира, че плащането е извършено)
+ URL_CANCEL  - URL на което клиента да бъде препратен в случай, че 
+               откаже плащането</pre>
+<p>______________________________________________________________________</p>
+<p>КРАЙ
+</p>
+
+</body>
+
+</html>

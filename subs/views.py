@@ -65,6 +65,7 @@ def init(request):
     try:
         with transaction.atomic():
             subsInit(request)
+            # page = request.data['PAGE']
         # raise Exception("Test exception")
     except Exception as e:
         print(str(e))

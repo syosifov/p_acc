@@ -1,14 +1,5 @@
-import enum
-import os
-# from django import setup
-# from acc.c import A411
-# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'p_acc.core.settings')
-# setup()
-# import acc.con as c
-
-# from math import pi
 import math
-
+import base64
 
 def t1():
     n = 3
@@ -24,4 +15,49 @@ def t2():
     math.pi = 222
     print(math.pi)
     
-t2()    
+msg = '''message = "Python is fun"
+message_bytes = message.encode('ascii')
+base64_bytes = base64.b64encode(message_bytes)
+base64_message = base64_bytes.decode('ascii')
+
+print(base64_message)message = "Python is fun"
+message_bytes = message.encode('ascii')
+base64_bytes = base64.b64encode(message_bytes)
+base64_message = base64_bytes.decode('ascii')
+
+print(base64_message)message = "Python is fun"
+message_bytes = message.encode('ascii')
+base64_bytes = base64.b64encode(message_bytes)
+base64_message = base64_bytes.decode('ascii')
+
+print(base64_message)message = "Python is fun"
+message_bytes = message.encode('ascii')
+base64_bytes = base64.b64encode(message_bytes)
+base64_message = base64_bytes.decode('ascii')
+
+print(base64_message)'''
+
+msg = "Python is fun"
+
+def b64_encode(message):
+    message_bytes = message.encode('utf-8')
+    base64_bytes = base64.b64encode(message_bytes)
+    base64_message = base64_bytes.decode('utf-8')
+    return base64_message
+
+
+def b64_decode(b64_message):
+    b64_message_bytes = b64_message.encode('utf-8')
+    message_bytes = base64.b64decode(b64_message_bytes)
+    message = message_bytes.decode('utf-8')
+    return message
+
+
+def encode_decode_test():
+    m1 = b64_encode(msg)
+    print(m1)
+
+    m2 = b64_decode(m1)
+    print(m2)
+
+encode_decode_test()
