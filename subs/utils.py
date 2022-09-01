@@ -1,11 +1,12 @@
-from django.db import transaction
-import decimal
 from decimal import Decimal as D
+import base64
+
+from django.db import transaction
 from core.con import A411, A412, A501, A712, LZ
 from acc.utils import getOrCreateAcc, assignData
 
 from .models import Subscriber, Tax, AssignedTax, Group
-
+from .epay import MIN, secret
 
 def createSubscriber(group: Group,
                      start: str,
@@ -164,4 +165,45 @@ def importMoney(subscriber_id,
                 amount,
                 subscriber.name +" "+ description)
     
+def b64_encode(message: str, cp: str = 'utf-8'):
+    message_bytes = message.encode(cp)
+    base64_bytes = base64.b64encode(message_bytes)
+    base64_message = base64_bytes.decode(cp)
+    return base64_message
 
+
+def b64_decode(b64_message: str, cp: str = 'utf-8'):
+    b64_message_bytes = b64_message.encode(cp)
+    message_bytes = base64.b64decode(b64_message_bytes)
+    message = message_bytes.decode(cp)
+    return message
+
+
+def hash_sha1(key: str, message: str, cp: str = 'utf-8'):
+    # https://www.adamsmith.haus/python/examples/1953/hmac-construct-a-new-hmac-hash-using-the-sha1-algorithm
+    import hmac
+    import hashlib  
+    
+    h = hmac.new(key.encode(cp), msg=message.encode(cp), digestmod=hashlib.sha1)
+    return h.hexdigest()
+
+    
+
+def test_epay():
+    m = MIN
+    invoice = '0010000001'
+    amount = 12.80
+    exp_time = '01.09.2022 17:00'
+    descr = "Tax 1"
+    
+    s = f'''MIN={m}
+INVOICE={invoice}
+AMOUNT={amount}
+EXP_TIME={exp_time}
+DESCR={descr}    
+'''
+    print(s)    
+    encoded = b64_encode(s)
+    print(encoded)
+    check_sum = hash_sha1(secret, encoded)
+    print(check_sum)

@@ -8,7 +8,8 @@ from .utils import (subsInit,
                     testSubscribeTax, 
                     testAssignTax,
                     payTax,
-                    importMoney)
+                    importMoney,
+                    test_epay)
 from .models import Tax, AssignedTax, Subscriber
 from .serializers import TaxSerializer, AssignedTaxSerializer, SubscriberSerializer
 
@@ -117,3 +118,9 @@ def installment(request):
     return Response(status=status.HTTP_201_CREATED)
 
 
+
+@api_view(['GET'])
+def test(request):
+    test_epay()
+    
+    return Response(status=status.HTTP_200_OK)

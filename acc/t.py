@@ -39,20 +39,20 @@ print(base64_message)'''
 
 msg = "Python is fun"
 
-def b64_encode(message):
+def b64_encode(message: str):
     message_bytes = message.encode('utf-8')
     base64_bytes = base64.b64encode(message_bytes)
     base64_message = base64_bytes.decode('utf-8')
     return base64_message
 
 
-def b64_decode(b64_message):
+def b64_decode(b64_message: str):
     b64_message_bytes = b64_message.encode('utf-8')
     message_bytes = base64.b64decode(b64_message_bytes)
     message = message_bytes.decode('utf-8')
     return message
 
-
+# https://stackabuse.com/encoding-and-decoding-base64-strings-in-python/
 def encode_decode_test():
     m1 = b64_encode(msg)
     print(m1)
@@ -60,4 +60,20 @@ def encode_decode_test():
     m2 = b64_decode(m1)
     print(m2)
 
-encode_decode_test()
+
+
+
+def hmac_test():
+    # https://www.adamsmith.haus/python/examples/1953/hmac-construct-a-new-hmac-hash-using-the-sha1-algorithm
+    import hmac
+    import hashlib    
+    
+    h = hmac.new("key".encode('utf-8'), msg="abc".encode('utf-8'), digestmod=hashlib.sha1)
+    print (h.hexdigest())
+
+
+
+
+# encode_decode_test()
+hmac_test()
+

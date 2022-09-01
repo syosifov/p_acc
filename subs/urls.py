@@ -8,7 +8,8 @@ from .views import (create_subscriber,
                     init,
                     unpaid,
                     pay,
-                    installment)
+                    installment,
+                    test)
 
 
 router = DefaultRouter()
@@ -23,5 +24,6 @@ urlpatterns = [
     path('unpaid/', unpaid),
     path('pay/', pay),
     path('installment/', installment),
+    path('test/', test),
     path('', include(router.urls)),
 ]
