@@ -1,5 +1,6 @@
 from decimal import Decimal as D
 import base64
+import time
 
 from django.db import transaction
 from core.con import A411, A412, A501, A712, LZ
@@ -189,12 +190,20 @@ def hash_sha1(key: str, message: str, cp: str = 'utf-8'):
 
     
 
-def test_epay():
+def test_epay(assigned_tax_id: int):
+    at = AssignedTax.objects.get(pk=assigned_tax_id)
+    amount_to_pay = at.amount - at.amount_paid
+    descr = at.description
+    seconds = time.time()
+    s2 = seconds + 60 * 60
+    st = time.localtime(s2)
+    exp_time = time.strftime("%d.%m.%Y, %H:%M:%S", st)
+
     m = MIN
-    invoice = '0010000001'
-    amount = 12.80
-    exp_time = '01.09.2022 17:00'
-    descr = "Tax 1"
+    # TODO to make a proper invoice numbering
+    invoice = '001'+str(assigned_tax_id).zfill(7)
+    amount = amount_to_pay
+    
     
     s = f'''MIN={m}
 INVOICE={invoice}

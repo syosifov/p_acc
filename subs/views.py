@@ -119,8 +119,16 @@ def installment(request):
 
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def test(request):
-    test_epay()
-    
-    return Response(status=status.HTTP_200_OK)
+
+    try:
+        with transaction.atomic():
+            assigned_tax_id = int(request.data['assigned_tax_id'])
+            test_epay(assigned_tax_id)
+            # raise Exception("Test exception")
+    except Exception as e:
+        print(str(e))
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(status=status.HTTP_201_CREATED)
