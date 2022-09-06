@@ -219,7 +219,8 @@ DESCR={descr}
                               invoice,
                               str(amount_to_pay),
                               exp_time,
-                              descr,encoded,
+                              descr,
+                              encoded,
                               check_sum)
     serializer = EpayRequestSerializer(epayRequest)
     

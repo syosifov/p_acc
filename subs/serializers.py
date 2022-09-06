@@ -37,3 +37,4 @@ class EpayRequestSerializer(serializers.Serializer):
     ENCODED = serializers.CharField()
     CHECKSUM = serializers.CharField()
     PAGE = serializers.CharField()
+    ENCODING = serializers.CharField()

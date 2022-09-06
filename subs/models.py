@@ -76,7 +76,8 @@ class Subscriber(models.Model):
 class EpayRequest:
     def __init__(self, MIN, INVOICE, AMOUNT,
                  EXP_TIME, DESCR, ENCODED, CHECKSUM,
-                 PAGE="paylogin"):
+                 PAGE="paylogin",
+                 ENCODING="utf-8"):
         self.MIN = MIN
         self.INVOICE = INVOICE
         self.AMOUNT = AMOUNT
@@ -85,3 +86,4 @@ class EpayRequest:
         self.ENCODED = ENCODED
         self.CHECKSUM = CHECKSUM
         self.PAGE = PAGE
+        self.ENCODING = ENCODING
