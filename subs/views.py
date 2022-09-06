@@ -125,10 +125,10 @@ def test(request):
     try:
         with transaction.atomic():
             assigned_tax_id = int(request.data['assigned_tax_id'])
-            test_epay(assigned_tax_id)
+            data = test_epay(assigned_tax_id)
             # raise Exception("Test exception")
     except Exception as e:
         print(str(e))
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
-    return Response(status=status.HTTP_201_CREATED)
+    return Response(data, status=status.HTTP_201_CREATED)

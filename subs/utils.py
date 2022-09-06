@@ -6,7 +6,8 @@ from django.db import transaction
 from core.con import A411, A412, A501, A712, LZ
 from acc.utils import getOrCreateAcc, assignData
 
-from .models import Subscriber, Tax, AssignedTax, Group
+from .models import EpayRequest, Subscriber, Tax, AssignedTax, Group
+from .serializers import EpayRequestSerializer
 from .epay import MIN, secret
 
 def createSubscriber(group: Group,
@@ -211,8 +212,17 @@ AMOUNT={amount}
 EXP_TIME={exp_time}
 DESCR={descr}    
 '''
-    print(s)    
     encoded = b64_encode(s)
-    print(encoded)
     check_sum = hash_sha1(secret, encoded)
-    print(check_sum)
+
+    epayRequest = EpayRequest(MIN,
+                              invoice,
+                              str(amount_to_pay),
+                              exp_time,
+                              descr,encoded,
+                              check_sum)
+    serializer = EpayRequestSerializer(epayRequest)
+    
+    print(serializer.data)
+    
+    return serializer.data

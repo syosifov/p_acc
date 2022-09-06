@@ -71,3 +71,17 @@ class Subscriber(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+
+class EpayRequest:
+    def __init__(self, MIN, INVOICE, AMOUNT,
+                 EXP_TIME, DESCR, ENCODED, CHECKSUM,
+                 PAGE="paylogin"):
+        self.MIN = MIN
+        self.INVOICE = INVOICE
+        self.AMOUNT = AMOUNT
+        self.EXP_TIME = EXP_TIME
+        self.DESCR = DESCR
+        self.ENCODED = ENCODED
+        self.CHECKSUM = CHECKSUM
+        self.PAGE = PAGE
