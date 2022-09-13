@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'acc',
     'subs',
     'school',
+    'epay'
 ]
 
 REST_FRAMEWORK = {
