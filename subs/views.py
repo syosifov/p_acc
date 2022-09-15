@@ -8,8 +8,7 @@ from .utils import (subsInit,
                     testSubscribeTax, 
                     testAssignTax,
                     payTax,
-                    importMoney,
-                    test_epay)
+                    importMoney)
 from .models import Tax, AssignedTax, Subscriber
 from .serializers import TaxSerializer, AssignedTaxSerializer, SubscriberSerializer
 
@@ -124,11 +123,10 @@ def test(request):
 
     try:
         with transaction.atomic():
-            assigned_tax_id = int(request.data['assigned_tax_id'])
-            data = test_epay(assigned_tax_id)
+            pass
             # raise Exception("Test exception")
     except Exception as e:
         print(str(e))
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
-    return Response(data, status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_201_CREATED)
