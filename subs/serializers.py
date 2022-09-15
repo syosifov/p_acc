@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Tax, AssignedTax, Subscriber, EpayRequest
+from .models import Tax, AssignedTax, Subscriber
 
 
 class TaxSerializer(serializers.ModelSerializer):
@@ -26,15 +26,3 @@ class SubscriberSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 
-
-class EpayRequestSerializer(serializers.Serializer):
-    MIN = serializers.CharField()
-    INVOICE = serializers.CharField()
-    # AMOUNT = serializers.DecimalField()
-    AMOUNT = serializers.CharField()
-    EXP_TIME = serializers.CharField()
-    DESCR = serializers.CharField()
-    ENCODED = serializers.CharField()
-    CHECKSUM = serializers.CharField()
-    PAGE = serializers.CharField()
-    ENCODING = serializers.CharField()

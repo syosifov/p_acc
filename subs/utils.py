@@ -1,14 +1,11 @@
 from decimal import Decimal as D
-import base64
-import time
 
 from django.db import transaction
 from core.con import A411, A412, A501, A712, LZ
 from acc.utils import getOrCreateAcc, assignData
 
-from .models import EpayRequest, Subscriber, Tax, AssignedTax, Group
-from .serializers import EpayRequestSerializer
-from .epay import MIN, secret
+from .models import Subscriber, Tax, AssignedTax, Group
+
 
 def createSubscriber(group: Group,
                      start: str,
