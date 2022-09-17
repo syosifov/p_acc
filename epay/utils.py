@@ -34,10 +34,10 @@ def prepare_payment(min: str,
                     amount: Decimal, 
                     descr: str, 
                     invoice_numb: str,
-                    exp_in_sec: int):
-    # at = AssignedTax.objects.get(pk=assigned_tax_id)
-    # amount_to_pay = at.amount - at.amount_paid
-    # descr = at.description
+                    exp_in_sec: int,
+                    exp_at: str = '',
+                    encoding: str = 'utf-8'):
+    
     if not invoice_numb.isdigit():
         raise Exception("Invoice number must contain only digits")
     merchant = Merchant.objects.get(min=min)
@@ -45,20 +45,21 @@ def prepare_payment(min: str,
     seconds = time.time()
     s2 = seconds + exp_in_sec
     st = time.localtime(s2)
-    exp_time = time.strftime("%d.%m.%Y, %H:%M:%S", st)
+    exp_time = time.strftime("%d.%m.%Y %H:%M:%S", st)
 
-    # m = MIN
-    # TODO to make a proper invoice numbering
-    # invoice = '001'+str(assigned_tax_id).zfill(7)
-    # amount = amount_to_pay
+    if not exp_at == '':
+        exp_time = exp_at
     
     
     s = f'''MIN={min}
 INVOICE={invoice_numb}
 AMOUNT={amount}
 EXP_TIME={exp_time}
-DESCR={descr}    
+DESCR={descr}
+ENCODING={encoding}
 '''
+    print()
+    print(s,"\n\n")
     encoded = b64_encode(s)
     check_sum = hash_sha1(secret, encoded)
 
@@ -71,6 +72,6 @@ DESCR={descr}
                               check_sum)
     serializer = EpayRequestSerializer(epayRequest)
     
-    print(serializer.data)
+    print("\nserializer.data\n",serializer.data,"\n\n")
     
     return serializer.data

@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import transaction
 
 from rest_framework.decorators import api_view, permission_classes
@@ -11,6 +12,7 @@ from .utils import (subsInit,
                     importMoney)
 from .models import Tax, AssignedTax, Subscriber
 from .serializers import TaxSerializer, AssignedTaxSerializer, SubscriberSerializer
+from epay.utils import prepare_payment
 
 # Create your views here.
 
@@ -119,14 +121,19 @@ def installment(request):
 
 
 @api_view(['POST'])
-def test(request):
+def test(request):          # /subs/test/
 
     try:
         with transaction.atomic():
-            pass
+            min = request.data['min']
+            inv = request.data['inv']
+            amount = request.data['amount']
+            descr = request.data['descr']
+            sec = request.data['sec']
+            r = prepare_payment(min, Decimal(amount), descr, inv, int(sec))
             # raise Exception("Test exception")
     except Exception as e:
         print(str(e))
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
-    return Response(status=status.HTTP_201_CREATED)
+    return Response(r, status=status.HTTP_201_CREATED)
