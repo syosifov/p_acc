@@ -1,5 +1,4 @@
 import base64
-from decimal import Decimal
 import time
 import hmac
 import hashlib
@@ -31,7 +30,7 @@ def hash_sha1(key: str, message: str, cp: str = 'utf-8'):
     
 
 def prepare_payment(min: str, 
-                    amount: Decimal, 
+                    amount: str, 
                     descr: str, 
                     invoice_numb: str,
                     exp_in_sec: int,
@@ -51,9 +50,10 @@ def prepare_payment(min: str,
         exp_time = exp_at
     
     
+    amount_f = f'{float(amount):.2f}'
     s = f'''MIN={min}
 INVOICE={invoice_numb}
-AMOUNT={amount}
+AMOUNT={amount_f}
 EXP_TIME={exp_time}
 DESCR={descr}
 ENCODING={encoding}
@@ -65,7 +65,7 @@ ENCODING={encoding}
 
     epayRequest = EpayRequest(min,
                               invoice_numb,
-                              str(amount),
+                              amount_f,
                               exp_time,
                               descr,
                               encoded,

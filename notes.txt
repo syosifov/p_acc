@@ -28,3 +28,18 @@ tax.subscriber_set.all()
 
 chld = Account.objects.filter(parent=a501)
 lst = Account.objects.filter(parent='501')
+
+*************** deployment *******************
+https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Deployment
+
+pip3 install gunicorn
+pip3 install dj-database-url
+pip3 install psycopg2-binary
+--------------
+The collectstatic tool is used to collect static files into the folder 
+defined by the STATIC_ROOT project setting. It is called with the 
+following command:
+
+python3 manage.py collectstatic
+--------------
+pip3 install whitenoise

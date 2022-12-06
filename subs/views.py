@@ -130,7 +130,7 @@ def test(request):          # /subs/test/
             amount = request.data['amount']
             descr = request.data['descr']
             sec = request.data['sec']
-            r = prepare_payment(min, Decimal(amount), descr, inv, int(sec))
+            r = prepare_payment(min, amount, descr, inv, int(sec))
             # raise Exception("Test exception")
     except Exception as e:
         print(str(e))
