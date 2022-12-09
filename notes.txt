@@ -43,3 +43,12 @@ following command:
 python3 manage.py collectstatic
 --------------
 pip3 install whitenoise
+
+
+postgresql://
+postgres:PZlaIHR5168W0uuRR9Sk@
+containers-us-west-150.railway.app:7061/railway
+
+railway run python manage.py makemigrations
+railway run python manage.py migrate
+python -c "import secrets; print(secrets.token_urlsafe())"
