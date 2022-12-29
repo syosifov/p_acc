@@ -188,3 +188,4 @@ STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # -----------------------------
 
+CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']

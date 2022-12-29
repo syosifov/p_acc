@@ -45,9 +45,15 @@ python3 manage.py collectstatic
 pip3 install whitenoise
 
 
+postgresql://postgres:XcHBWV9sFPACQftwwxyG@containers-us-west-52.railway.app:5629/railway
+
+
 postgresql://
-postgres:PZlaIHR5168W0uuRR9Sk@
-containers-us-west-150.railway.app:7061/railway
+postgres:XcHBWV9sFPACQftwwxyG
+         XcHBWV9sFPACQftwwxyG
+@
+containers-us-west-52.railway.app:5629/railway
+
 
 railway run python manage.py makemigrations
 railway run python manage.py migrate
