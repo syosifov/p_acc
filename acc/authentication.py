@@ -41,6 +41,7 @@ class CustomAuthToken(ObtainAuthToken):     # login/
         user_serializer = UserSerializer(user)
         data = user_serializer.data
         data['token'] = token.key
+        data['all_permissions'] = list(user.get_all_permissions())
         return Response(data=data,status=status.HTTP_200_OK)
  
         
