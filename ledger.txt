@@ -1,0 +1,242 @@
+1 | CAPITAL AND LOAN ACCOUNTS
+10 | Capital
+101 | Fixed capital requiring registration | Passive | Analytical
+102 | Capital not requiring registration (for consortia and companies under the CPA) | Passive | Analytical
+103 | Liquidation capital in case of bankruptcy and liquidation | Passive | Analytical
+104 | Capital of non - profit enterprises | Passive | Analytical
+11 | Capital Reserves
+111 | General reserves | Passive | Analytical
+112 | Reserves from subsequent valuation of fixed assets | Passive | Analytical
+113 | Reserves from subsequent valuation of financial instruments | Passive | Analytical
+114 | Reserves from issue of shares | Passive | Analytical
+115 | Capital reserves | Passive | Synthetic
+116 | Repurchased own shares | Active | Synthetic
+119 | other reserves | Passive | Analytical
+12 | Financial Results
+121 | Uncovered loss from previous years | Active | Analytical
+122 | Retained earnings from previous years | Passive | Analytical
+123 | Profits and losses from the current year | Act-Pass | Synthetic
+124 | Result in bankruptcy and liquidation | Passive | Synthetic
+125 | Result of the activity of non-profit enterprises | Act-Pass | Synthetic
+15 | Loans received
+151 | Short-term loans received | Passive | Analytical
+152 | Long-term loans received | Passive | Analytical
+153 | Credit cards | Passive | Analytical
+154 | Debt instruments | Passive | Analytical
+159 | Other loans and debts | Passive | Analytical
+2 | FIXED ASSETS ACCOUNTS
+20 | Fixed Tangible Assets
+2011 | Lands (Terrains) | Active | Analytical
+2012 | Land improvements | Active | Analytical
+202 | Buildings and structures | Active | Analytical
+203 | Computer equipment | Active | Analytical
+204 | Facilities | Active | Analytical
+205 | Machinery and equipment | Active | Analytical
+206 | Vehicles | Active | Analytical
+207 | Office furniture | Active | Analytical
+209 | Other tangible fixed assets | Active | Analytical
+21 | Fixed Intangible Assets
+211 | Development products | Active | Analytical
+212 | Software products | Active | Analytical
+213 | Intellectual property rights | Active | Analytical
+214 | Industrial property rights | Active | Analytical
+219 | Other intangible fixed assets | Active | Analytical
+22 | Long - term Financial Assets
+221 | Investments in subsidiaries | Active | Analytical
+222 | Investments in associates | Active | Analytical
+223 | Investments in joint ventures | Active | Analytical
+224 | Real estate investments (Investment properties) | Active | Analytical
+225 | Investments in financial assets held to maturity | Active | Analytical
+226 | Investments in financial assets at fair value through profit or loss | Active | Analytical
+227 | Provided long-term loans and receivables | Active | Analytical
+228 | Investments in available-for-sale financial assets | Active | Analytical
+229 | Investments in other long - term financial assets | Active | Analytical
+23 | Goodwill
+231 | Positive commercial reputation | Active | Analytical
+232 | Negative commercial reputation | Passive | Analytical
+24 | Depreciation
+2412 | (Accumulated) Depreciation of buildings and structures | Corrective | Analytical
+2413 | (Accumulated) Depreciation of computer equipment | Corrective | Analytical
+2414 | (Accumulated) Depreciation of equipment | Corrective | Analytical
+2415 | (Accumulated) Depreciation of machinery and equipment | Corrective | Analytical
+2416 | (Accumulated) Depreciation of vehicles | Corrective | Analytical
+2417 | (Accumulated) Depreciation of office furniture | Corrective | Analytical
+2419 | (Accumulated) Depreciation of other tangible fixed assets | Corrective | Analytical
+2421 | (Accumulated) Depreciation of development products | Corrective | Analytical
+2422 | (Accumulated) Depreciation of software products | Corrective | Analytical
+2429 | (Accumulated) Amortization of other intangible fixed assets | Corrective | Analytical
+2431 | (Accumulated) Depreciation of real estate investments (Investment properties) | Corrective | Analytical
+2432 | (Accumulated) Depreciation of biological assets | Corrective | Analytical
+2433 | (Accumulated) Depreciation of goodwill | Corrective | Analytical
+25 | Impairment adjustments
+251 | Impairment adjustment of receivables | Corrective | Analytical
+252 | Impairment adjustment for other assets | Corrective | Analytical
+27 | Fixed Biological Assets
+271 | It burns | Active | Analytical
+272 | Perennials - fruitful | Active | Analytical
+273 | Perennials - infertile | Active | Analytical
+274 | Animals in major herds | Active | Analytical
+279 | Other fixed biological assets | Active | Analytical
+3 | ACCOUNTS FOR INVENTORIES
+30 | Raw Materials, Products and Goods
+301 | Delivery | Active | Analytical
+302 | Raw materials | Active | Analytical
+303 | Products | Active | Analytical
+304 | Goods | Active | Analytical
+31 | Current Biological Assets
+311 | Small productive animals | Active | Analytical
+312 | Birds - main flocks | Active | Analytical
+313 | Bee families | Active | Analytical
+314 | Young animals | Active | Analytical
+315 | Animals for fattening | Active | Analytical
+316 | Animals for experimental purposes | Active | Analytical
+319 | Other current biological assets | Active | Analytical
+4 | ACCOUNTS FOR SETTLEMENTS
+40 | Providers and Related Accounts
+401 | Obligations to suppliers | Passive | Analytical
+402 | Receivables from suppliers on advances | Active | Analytical
+403 | Liabilities to trade credit providers | Passive | Analytical
+404 | Liabilities to suppliers under supplies under certain conditions | Passive | Analytical
+405 | Liabilities to suppliers related parties | Passive | Analytical
+409 | Other liabilities to suppliers | Passive | Analytical
+41 | Customers and Related Accounts
+411 | Receivables from customers | Active | Analytical
+412 | Liabilities to customers on advances | Passive | Analytical
+413 | Receivables from customers on trade credits | Active | Analytical
+414 | Receivables from sales customers under certain conditions | Active | Analytical
+415 | Receivables from customers related parties | Active | Analytical
+419 | Other receivables from customers | Active | Analytical
+42 | Staff and Partners
+421 | Obligations to staff | Passive | Analytical
+422 | Settlements with accountable persons | Act-Pass | Analytical
+423 | Liabilities for unused leave | Passive | Analytical
+424 | Receivables from participations | Active | Analytical
+425 | Obligations for participation | Passive | Analytical
+426 | Receivables from subscribed share contributions | Active | Analytical
+429 | Other settlements with staff and partners | Act-Pass | Analytical
+44 | Claims on Arrears, Deductions and Litigation
+441 | Claims on claims | Active | Analytical
+442 | Receivables for losses and deductions | Active | Analytical
+443 | Price differences by shortages and readings | Passive | Analytical
+444 | Claims in litigation | Active | Analytical
+445 | Awarded receivables | Active | Analytical
+45 | Budget and Department estimates
+4521 | Estimates for Annual Corporate Tax | Act-Pass | Analytical
+4522 | Estimates for Advance Corporate Tax | Act-Pass | Synthetic
+4531 | Value added tax charged on purchases | Active | Synthetic
+4532 | Value added tax charged on sales | Passive | Synthetic
+4536 | Deferred tax credit | Active | Analytical
+4537 | Unused tax credit | Active | Analytical
+4538 | Value added tax for refund | Active | Synthetic
+4539 | Value added tax to be paid | Passive | Synthetic
+454 | Estimates of personal income taxes | Act-Pass | Synthetic
+456 | Excise estimates | Act-Pass | Analytical
+457 | Customs settlements | Act-Pass | Analytical
+459 | Tax estimates with the budget | Act-Pass | Analytical
+46 | Settlements with Insurers
+461 | Compulsory social security estimates | Act-Pass | Analytical
+462 | Voluntary social security estimates | Act-Pass | Analytical
+463 | Health insurance estimates | Act-Pass | Analytical
+469 | Other settlements with insurers | Act-Pass | Analytical
+49 | Miscellaneous Debtors and Creditors
+491 | Settlements with trustees | Act-Pass | Analytical
+492 | Guarantee estimates | Act-Pass | Analytical
+493 | Settlements with owners | Act-Pass | Analytical
+494 | Deferred tax estimates | Act-Pass | Analytical
+495 | Insurance estimates | Act-Pass | Analytical
+496 | Interest calculations | Act-Pass | Analytical
+497 | Provisions | Passive | Analytical
+498 | Other debtors | Active | Analytical
+499 | Other creditors | Passive | Analytical
+5 | ACCOUNTS FOR FINANCIAL RESOURCES
+50 | Cash
+501 | Cashier in BGN | Active | Analytical
+502 | Cash in foreign currency | Active | Analytical
+503 | Current accounts in BGN | Active | Analytical
+504 | Current account in foreign currency | Active | Analytical
+505 | Letters of credit | Active | Analytical
+506 | Deposits provided | Active | Analytical
+507 | Cash pledged as collateral | Active | Analytical
+509 | Other cash (including vouchers and checks) | Active | Analytical
+51 | Short-term Financial Assets
+511 | Financial assets at fair value through profit or loss | Active | Analytical
+512 | Financial assets held to maturity | Active | Analytical
+513 | Short - term loans and receivables | Active | Analytical
+514 | Financial assets available for sale | Active | Analytical
+519 | Other short-term financial assets (including precious metals) | Active | Analytical
+6 | EXPENDITURE ACCOUNTS
+60 | Expenditures by Economic Elements
+601 | Material costs | Active | Analytical
+602 | Costs for external services | Active | Analytical
+603 | Depreciation costs | Active | Analytical
+604 | Wage costs (remuneration) | Active | Analytical
+605 | Insurance costs | Active | Analytical
+606 | Expenses for taxes, fees and other similar payments | Active | Analytical
+607 | Provision costs | Active | Analytical
+608 | Expenses from subsequent valuations of assets | Active | Analytical
+609 | Other expenses | Active | Analytical
+61 | Activity costs
+611 | Operating expenses | Active | Analytical
+612 | Ancillary activity costs | Active | Analytical
+613 | Expenses for acquisition of fixed assets | Active | Analytical
+614 | Administrative costs | Active | Analytical
+615 | Sales costs | Active | Analytical
+62 | Financial expenses
+621 | Interest expenses | Active | Analytical
+623 | Expenses on operations with financial assets and instruments | Active | Analytical
+624 | Expenses on foreign exchange operations | Active | Synthetic
+625 | Expenses from subsequent valuations of financial assets and instruments | Active | Analytical
+629 | Other financial expenses | Active | Analytical
+65 | Expenses for Future Periods
+651 | Non-financial expenses for future periods | Active | Analytical
+652 | Financial expenses for future periods | Active | Analytical
+69 | Extraordinary expenses
+691 | Exceptional costs | Active | Analytical
+7 | REVENUE ACCOUNTS
+70 | Sales revenue
+701 | Revenues from sales of products | Passive | Analytical
+702 | Revenues from sales of goods | Passive | Analytical
+703 | Revenues from sales of services | Passive | Analytical
+704 | Rental income | Passive | Analytical
+705 | Income from sales of fixed assets | Passive | Analytical
+706 | Revenues from sales of raw materials | Passive | Analytical
+707 | Income from subsequent valuation of assets | Passive | Analytical
+708 | Income from financing | Passive | Analytical
+709 | Other operating income | Passive | Analytical
+71 | Revenues in Non-profit Enterprises
+711 | Revenues from regulated activity | Passive | Analytical
+712 | Revenues from membership fees | Passive | Synthetic
+713 | Revenues from financing and donations | Passive | Synthetic
+719 | Other incomes | Passive | Analytical
+72 | Financial income
+721 | Interest income | Passive | Analytical
+722 | Income from participations | Passive | Analytical
+723 | Income from operations with financial assets and instruments | Passive | Analytical
+724 | Income from foreign exchange operations | Passive | Synthetic
+725 | Income from subsequent valuations of financial assets and instruments | Passive | Analytical
+729 | Other financial income | Passive | Analytical
+75 | Deferred income and Funding
+751 | Non-financial income for future periods | Passive | Analytical
+752 | Financial income for future periods | Passive | Analytical
+753 | Financing for fixed assets | Passive | Analytical
+754 | Financing of the current activity | Passive | Analytical
+79 | Extraordinary Revenues
+791 | Extraordinary income | Passive | Analytical
+9 | ACCOUNTS FOR CONTINGENT ASSETS AND LIABILITIES
+91 | Foreign Tangible, Intangible and Financial Assets in Storage
+911 | Leased foreign assets | Active | Analytical
+912 | Foreign tangible assets received under a consignment agreement | Active | Analytical
+913 | Other tangible and intangible assets accepted for safekeeping | Active | Analytical
+914 | Financial assets or cash accepted for safekeeping | Active | Analytical
+98 | Other Contingent Assets
+981 | Foreign tangible and intangible assets received as collateral | Active | Analytical
+982 | Foreign financial assets received as collateral | Active | Analytical
+983 | Policies or promissory notes received as collateral | Active | Analytical
+984 | Other contingent assets | Active | Analytical
+989 | Corresponding account for contingent assets | Active | Synthetic
+99 | Other Contingent Liabilities
+991 | Own tangible and intangible assets provided as collateral | Passive | Analytical
+992 | Own financial assets provided as collateral | Passive | Analytical
+993 | Policies or promissory notes provided as collateral | Passive | Analytical
+994 | Other contingent liabilities | Passive | Analytical
+999 | Corresponding account for contingent liabilities | Passive | Synthetic
