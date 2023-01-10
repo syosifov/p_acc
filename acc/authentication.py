@@ -38,6 +38,8 @@ class CustomAuthToken(ObtainAuthToken):     # login/
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
+        groups = user.groups;
+        print(list(groups.all().values('name')))
         user_serializer = UserSerializer(user)
         data = user_serializer.data
         data['token'] = token.key
