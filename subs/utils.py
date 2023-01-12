@@ -1,30 +1,32 @@
 from decimal import Decimal as D
-
 from django.db import transaction
+from django.contrib.auth.models import User
 from core.con import A411, A412, A501, A712, LZ
 from acc.utils import getOrCreateAcc, assignData
 
 from .models import Subscriber, Tax, AssignedTax, Group
 
 
-def createSubscriber(group: Group,
-                     start: str,
-                     end: str,
+def createSubscriber(user: User,                     
+                     group: Group,
+                     subs_number: int,
                      suffix: str ='a'):
+    
     parentAcc411 = getOrCreateAcc(A411, group.name)
     parentAcc412 = getOrCreateAcc(A412, group.name)
     parentAcc501 = getOrCreateAcc(A501, group.name)
-    for i in range(int(start), int(end)+1):
-        s = suffix+str(i).zfill(LZ)
-        acc411 = getOrCreateAcc(parentAcc411.name, s)
-        acc412 = getOrCreateAcc(parentAcc412.name, s)
-        acc501 = getOrCreateAcc(parentAcc501.name, s)
-        subscriber = Subscriber(group=group,
-                                name=group.name+s,
-                                a411=acc411,
-                                a412=acc412,
-                                a501=acc501)
-        subscriber.save()
+    # for i in range(int(start), int(end)+1):
+    s = suffix+str(subs_number).zfill(LZ)
+    acc411 = getOrCreateAcc(parentAcc411.name, s)
+    acc412 = getOrCreateAcc(parentAcc412.name, s)
+    acc501 = getOrCreateAcc(parentAcc501.name, s)
+    subscriber = Subscriber(user=user,
+                            group=group,
+                            name=group.name+s,
+                            a411=acc411,
+                            a412=acc412,
+                            a501=acc501)
+    subscriber.save()
 
 
 def аssign1Data(debit: str,
@@ -100,10 +102,11 @@ def subsInit(request):
         createGroup('b001')
         createGroup('e01', parent_name='b001')
         g = Group.objects.get(pk='b001e01')
-        createSubscriber(g, '1', '4')
-        tax1 = Tax.objects.all()[0]
-        testSubscribeTax(tax1)
-        testAssignTax(tax1)
+        user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        createSubscriber(user, g, '1')
+        # tax1 = Tax.objects.all()[0]
+        # testSubscribeTax(tax1)
+        # testAssignTax(tax1)
     
     
 def payTheTax(subscriber: Subscriber,

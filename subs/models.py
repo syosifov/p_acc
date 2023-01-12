@@ -50,8 +50,9 @@ class Group(models.Model):
 
 class Subscriber(models.Model):
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE,blank=False, null=False)
     name = models.CharField(max_length=40, null=False,
-                            blank=False, unique=True, primary_key=True, default='0')
+                            blank=False, unique=True, default='0')
 
     a411 = models.OneToOneField(
         Account, on_delete=models.CASCADE, related_name='sa411', null=True, blank=True)
